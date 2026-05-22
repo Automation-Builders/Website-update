@@ -1,0 +1,241 @@
+{
+  "name": "Invoice Automation — Email → AI → Xero → Slack",
+  "nodes": [
+    {
+      "parameters": {
+        "pollTimes": {
+          "item": [
+            {
+              "mode": "everyMinute"
+            }
+          ]
+        },
+        "filters": {
+          "labelIds": ["INBOX"],
+          "q": "has:attachment filename:pdf newer_than:1d from:(billing OR invoice OR accounts OR ar OR @stripe OR @xero)"
+        },
+        "options": {
+          "downloadAttachments": true
+        }
+      },
+      "id": "01-gmail-trigger",
+      "name": "Gmail Trigger — new invoice email",
+      "type": "n8n-nodes-base.gmailTrigger",
+      "typeVersion": 1.2,
+      "position": [200, 320],
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "REPLACE_ME",
+          "name": "Gmail account (replace)"
+        }
+      },
+      "notes": "Polls every minute. Filter is intentionally generous — the AI step does the real classification. Adjust 'from:' to your suppliers' patterns."
+    },
+    {
+      "parameters": {
+        "operation": "pdf",
+        "binaryPropertyName": "attachment_0",
+        "options": {
+          "joinPages": true
+        }
+      },
+      "id": "02-pdf-extract",
+      "name": "Extract PDF text",
+      "type": "n8n-nodes-base.extractFromFile",
+      "typeVersion": 1,
+      "position": [440, 320],
+      "notes": "Reads the PDF attachment to text. If your supplier sends scanned PDFs, swap this for a Google Document AI / AWS Textract / Mistral OCR node."
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Extract the following fields from this invoice text. Return STRICT JSON only — no preamble, no markdown.\n\nFields:\n- supplier_name (string)\n- invoice_number (string)\n- invoice_date (YYYY-MM-DD)\n- due_date (YYYY-MM-DD)\n- subtotal_aud (number, GST exclusive)\n- gst_aud (number)\n- total_aud (number, GST inclusive)\n- currency (3-letter code)\n- line_items (array of {description, quantity, unit_price_aud, total_aud, suggested_gl_code})\n- po_number (string or null)\n- bank_details: {bsb, account_number, account_name}\n- payment_terms (string)\n- confidence (number 0-1 — how confident you are in the extraction)\n\nGL code hints: 4000 = revenue, 5000-5999 = COGS, 6100 = software subscriptions, 6200 = professional services, 6300 = office, 6400 = travel, 7000 = wages. Pick the closest.\n\nInvoice text:\n\n{{ $json.text }}",
+        "hasOutputParser": true,
+        "options": {
+          "systemMessage": "You are an Australian SMB finance assistant. Be conservative: if a field is ambiguous, prefer null over a guess. Output STRICT JSON.",
+          "temperature": 0
+        }
+      },
+      "id": "03-ai-extract",
+      "name": "AI Extract (invoice → structured)",
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 1.7,
+      "position": [680, 320],
+      "notes": "Use Claude Sonnet 4 or GPT-4o here — both are reliable at structured extraction. Temperature 0 for determinism."
+    },
+    {
+      "parameters": {
+        "mode": "raw",
+        "jsonOutput": "={{ JSON.parse($json.output) }}",
+        "options": {
+          "dotNotation": false
+        }
+      },
+      "id": "04-parse-json",
+      "name": "Parse AI JSON output",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [920, 320],
+      "notes": "Coerce the AI's string output into a real JSON object so downstream nodes can address fields."
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "leftValue": "={{ $json.confidence }}",
+              "rightValue": 0.85,
+              "operator": {
+                "type": "number",
+                "operation": "gte"
+              }
+            },
+            {
+              "leftValue": "={{ $json.total_aud }}",
+              "rightValue": 0,
+              "operator": {
+                "type": "number",
+                "operation": "gt"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "05-confidence-gate",
+      "name": "Confidence ≥ 0.85?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [1160, 320],
+      "notes": "Anything below 0.85 confidence or with a zero/negative total goes to the human-review path instead of straight to Xero."
+    },
+    {
+      "parameters": {
+        "resource": "bill",
+        "operation": "create",
+        "type": "ACCPAY",
+        "contact": "={{ $json.supplier_name }}",
+        "lineItems": "={{ $json.line_items.map(li => ({\n  Description: li.description,\n  Quantity: li.quantity,\n  UnitAmount: li.unit_price_aud,\n  AccountCode: li.suggested_gl_code,\n  TaxType: 'INPUT'\n})) }}",
+        "additionalFields": {
+          "InvoiceNumber": "={{ $json.invoice_number }}",
+          "Date": "={{ $json.invoice_date }}",
+          "DueDate": "={{ $json.due_date }}",
+          "Reference": "Auto-posted by Automation Builders flow",
+          "Status": "DRAFT"
+        }
+      },
+      "id": "06-xero-create-bill",
+      "name": "Xero — create draft bill",
+      "type": "n8n-nodes-base.xero",
+      "typeVersion": 1,
+      "position": [1400, 200],
+      "credentials": {
+        "xeroOAuth2Api": {
+          "id": "REPLACE_ME",
+          "name": "Xero (replace)"
+        }
+      },
+      "notes": "Always creates as DRAFT — a human approves before payment. If you want auto-approval for trusted suppliers, add a Set node before this that maps supplier_name to a whitelist."
+    },
+    {
+      "parameters": {
+        "select": "channel",
+        "channelId": {
+          "__rl": true,
+          "value": "#finance",
+          "mode": "name"
+        },
+        "text": "=:incoming_envelope: *New invoice ready for approval*\n*{{ $('04-parse-json').item.json.supplier_name }}* — A${{ $('04-parse-json').item.json.total_aud }} ({{ $('04-parse-json').item.json.invoice_number }})\nDue: {{ $('04-parse-json').item.json.due_date }}\n\n<https://go.xero.com/Bills/Edit/{{ $json.BillID || $json.id }}|Review in Xero →>",
+        "otherOptions": {}
+      },
+      "id": "07-slack-notify",
+      "name": "Slack — notify #finance",
+      "type": "n8n-nodes-base.slack",
+      "typeVersion": 2.2,
+      "position": [1640, 200],
+      "credentials": {
+        "slackApi": {
+          "id": "REPLACE_ME",
+          "name": "Slack (replace)"
+        }
+      },
+      "notes": "Posts a one-click-to-Xero card so the approver doesn't have to context-switch hunting for the bill."
+    },
+    {
+      "parameters": {
+        "select": "channel",
+        "channelId": {
+          "__rl": true,
+          "value": "#finance-review",
+          "mode": "name"
+        },
+        "text": "=:warning: *Invoice needs human review* (low confidence)\nFrom: *{{ $('04-parse-json').item.json.supplier_name || 'Unknown supplier' }}*\nConfidence: {{ ($('04-parse-json').item.json.confidence * 100).toFixed(0) }}%\nRaw text snippet:\n```\n{{ $('02-pdf-extract').item.json.text.substring(0, 400) }}\n```",
+        "otherOptions": {}
+      },
+      "id": "08-slack-human-review",
+      "name": "Slack — flag for human review",
+      "type": "n8n-nodes-base.slack",
+      "typeVersion": 2.2,
+      "position": [1400, 440],
+      "credentials": {
+        "slackApi": {
+          "id": "REPLACE_ME",
+          "name": "Slack (replace)"
+        }
+      },
+      "notes": "The human-fallback path. Cheaper to flag 10% of edge cases than to risk a bad post in Xero."
+    }
+  ],
+  "connections": {
+    "Gmail Trigger — new invoice email": {
+      "main": [[{ "node": "Extract PDF text", "type": "main", "index": 0 }]]
+    },
+    "Extract PDF text": {
+      "main": [[{ "node": "AI Extract (invoice → structured)", "type": "main", "index": 0 }]]
+    },
+    "AI Extract (invoice → structured)": {
+      "main": [[{ "node": "Parse AI JSON output", "type": "main", "index": 0 }]]
+    },
+    "Parse AI JSON output": {
+      "main": [[{ "node": "Confidence ≥ 0.85?", "type": "main", "index": 0 }]]
+    },
+    "Confidence ≥ 0.85?": {
+      "main": [
+        [{ "node": "Xero — create draft bill", "type": "main", "index": 0 }],
+        [{ "node": "Slack — flag for human review", "type": "main", "index": 0 }]
+      ]
+    },
+    "Xero — create draft bill": {
+      "main": [[{ "node": "Slack — notify #finance", "type": "main", "index": 0 }]]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "errorWorkflow": "",
+    "saveExecutionProgress": true,
+    "saveManualExecutions": true,
+    "saveDataErrorExecution": "all",
+    "saveDataSuccessExecution": "all"
+  },
+  "staticData": null,
+  "meta": {
+    "templateId": "automation-builders-invoice-v1",
+    "templateAuthor": "Automation Builders Pty Ltd",
+    "description": "Demo workflow showing the typical invoice-reconciliation build. Replace credential IDs and adjust the Gmail filter / GL-code hints to your business before going live.",
+    "lastUpdated": "2026-05-20"
+  },
+  "pinData": {},
+  "versionId": "ab-invoice-demo-v1",
+  "triggerCount": 1,
+  "tags": [
+    { "name": "demo" },
+    { "name": "invoice" },
+    { "name": "automation-builders" }
+  ]
+}

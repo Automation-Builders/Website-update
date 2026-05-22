@@ -1,0 +1,1195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Automation Builders — AI-Enabled Workflow Automation</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:       #0b0f17;
+  --bg-2:     #121826;
+  --panel:    #161d2b;
+  --panel-2:  #1b2333;
+  --border:   #2a3346;
+  --text:     #e8ecf4;
+  --muted:    #8b9ab8;
+  --accent:   #7c5cff;
+  --accent-2: #3ad0ff;
+  --good:     #26d07c;
+  --danger:   #ff5c7a;
+  --grad:     linear-gradient(135deg, #7c5cff 0%, #3ad0ff 100%);
+  --shadow:   0 20px 60px -20px rgba(124,92,255,0.35);
+  --shadow-sm:0 4px 20px -4px rgba(0,0,0,0.4);
+  --r:        16px;
+  --r-sm:     10px;
+}
+
+*{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{
+  font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;
+  background:var(--bg);
+  color:var(--text);
+  font-size:15px;
+  line-height:1.5;
+  -webkit-font-smoothing:antialiased;
+  overflow-x:hidden;
+}
+body::before{
+  content:'';
+  position:fixed;inset:0;
+  background:
+    radial-gradient(1000px 700px at 75% -5%,rgba(124,92,255,.14),transparent 60%),
+    radial-gradient(800px 600px at -5% 105%,rgba(58,208,255,.10),transparent 60%);
+  pointer-events:none;z-index:0;
+}
+
+/* ── LAYOUT ── */
+.wrap{max-width:1120px;margin:0 auto;padding:0 24px;position:relative;z-index:1;}
+section{position:relative;z-index:1;}
+
+/* ── BUTTONS ── */
+.btn{
+  display:inline-flex;align-items:center;gap:6px;
+  padding:9px 18px;border-radius:10px;
+  font-weight:700;font-size:14px;font-family:inherit;
+  cursor:pointer;border:none;text-decoration:none;
+  transition:transform .1s,filter .15s,background .15s,box-shadow .2s;
+  white-space:nowrap;
+}
+.btn-primary{background:var(--grad);color:#0b0f17;box-shadow:var(--shadow);}
+.btn-primary:hover{filter:brightness(1.1);transform:translateY(-1px);}
+.btn-secondary{background:rgba(255,255,255,.05);color:var(--text);border:1px solid var(--border);}
+.btn-secondary:hover{background:rgba(255,255,255,.09);}
+.btn-lg{padding:13px 24px;font-size:15px;border-radius:12px;}
+
+/* ── NAV ── */
+nav{
+  position:sticky;top:0;z-index:100;
+  border-bottom:1px solid rgba(42,51,70,.7);
+  background:rgba(11,15,23,.85);
+  backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
+}
+.nav-inner{
+  max-width:1120px;margin:0 auto;padding:0 24px;
+  height:60px;display:flex;align-items:center;
+  justify-content:space-between;gap:24px;
+}
+.logo{
+  display:flex;align-items:center;gap:10px;
+  font-weight:700;font-size:16px;letter-spacing:-.01em;
+  text-decoration:none;color:var(--text);
+}
+.logo-mark{
+  width:32px;height:32px;border-radius:9px;
+  background:var(--grad);display:grid;place-items:center;
+  font-weight:800;font-size:14px;color:#0b0f17;
+}
+.nav-links{display:flex;align-items:center;gap:4px;list-style:none;}
+.nav-links a{
+  color:var(--muted);text-decoration:none;font-size:14px;font-weight:500;
+  padding:6px 12px;border-radius:8px;transition:color .15s,background .15s;
+}
+.nav-links a:hover{color:var(--text);background:rgba(255,255,255,.05);}
+@media(max-width:640px){.nav-links{display:none;}}
+
+/* ── HERO ── */
+.hero{padding:88px 0 72px;text-align:center;}
+.eyebrow{
+  display:inline-flex;align-items:center;gap:8px;
+  font-size:12px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--accent-2);background:rgba(58,208,255,.08);
+  border:1px solid rgba(58,208,255,.2);
+  padding:6px 14px;border-radius:999px;margin-bottom:22px;
+}
+.eyebrow::before{content:'';width:6px;height:6px;border-radius:50%;background:var(--accent-2);flex-shrink:0;}
+.hero h1{
+  font-size:clamp(34px,5.5vw,60px);line-height:1.06;
+  letter-spacing:-.03em;font-weight:800;margin-bottom:18px;
+  max-width:800px;margin-left:auto;margin-right:auto;
+}
+.grad-text{background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent;}
+.hero p{color:var(--text);font-size:17px;line-height:1.6;max-width:680px;margin:0 auto 32px;font-weight:400;}
+.hero p em{color:var(--muted);font-style:normal;}
+.hero-callouts{display:flex;flex-direction:column;gap:6px;margin:0 auto 32px;max-width:560px;}
+.hero-callout{font-size:15px;color:var(--muted);display:flex;align-items:baseline;gap:10px;}
+.hero-callout::before{content:'→';color:var(--accent);font-weight:700;flex-shrink:0;}
+.hero-final{font-size:16px;font-weight:600;color:var(--accent-2);margin:0 auto 32px;max-width:600px;text-align:center;}
+.hero-ctas{display:flex;align-items:center;justify-content:center;gap:12px;flex-wrap:wrap;margin-bottom:56px;}
+
+/* flow diagram */
+.flow{
+  background:linear-gradient(180deg,var(--panel),var(--panel-2));
+  border:1px solid var(--border);border-radius:22px;
+  padding:32px 36px;max-width:900px;margin:0 auto;box-shadow:var(--shadow-sm);
+}
+.flow-label{font-size:12px;font-weight:700;letter-spacing:.09em;text-transform:uppercase;color:var(--muted);margin-bottom:28px;text-align:left;}
+.flow-steps{display:flex;align-items:center;overflow-x:auto;padding-bottom:4px;gap:0;}
+.flow-step{display:flex;flex-direction:column;align-items:center;gap:12px;min-width:130px;flex:1;}
+.flow-icon{
+  width:60px;height:60px;border-radius:15px;display:grid;place-items:center;
+  font-size:26px;border:1px solid var(--border);background:rgba(255,255,255,.03);flex-shrink:0;
+}
+.flow-icon.purple{background:rgba(124,92,255,.18);border-color:rgba(124,92,255,.35);}
+.flow-icon.cyan  {background:rgba(58,208,255,.14);border-color:rgba(58,208,255,.3);}
+.flow-icon.green {background:rgba(38,208,124,.14);border-color:rgba(38,208,124,.3);}
+.flow-step-label{font-size:13px;font-weight:500;color:var(--muted);text-align:center;line-height:1.35;max-width:110px;}
+.flow-arrow{color:var(--border);font-size:20px;flex-shrink:0;padding:0 6px;margin-bottom:30px;}
+
+
+/* ── SECTION HEADER ── */
+.section-header{text-align:center;margin-bottom:44px;}
+.section-header h2{font-size:clamp(24px,3.5vw,36px);font-weight:800;letter-spacing:-.025em;line-height:1.1;margin-bottom:10px;}
+.section-header p{color:var(--muted);font-size:15px;max-width:500px;margin:0 auto;line-height:1.5;}
+
+/* ── VALUE PROPS ── */
+.value-section{padding:80px 0;}
+.value-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:22px;}
+@media(max-width:720px){.value-grid{grid-template-columns:1fr;}}
+.value-card{
+  background:linear-gradient(180deg,var(--panel),var(--panel-2));
+  border:1px solid var(--border);border-radius:var(--r);padding:34px 30px;
+  transition:border-color .2s,transform .2s;
+}
+.value-card:hover{border-color:rgba(124,92,255,.35);transform:translateY(-2px);}
+.value-icon{width:50px;height:50px;border-radius:12px;display:grid;place-items:center;font-size:24px;margin-bottom:20px;}
+.value-icon.purple{background:rgba(124,92,255,.15);border:1px solid rgba(124,92,255,.2);}
+.value-icon.cyan  {background:rgba(58,208,255,.12);border:1px solid rgba(58,208,255,.18);}
+.value-icon.green {background:rgba(38,208,124,.12);border:1px solid rgba(38,208,124,.18);}
+.value-card h3{font-size:20px;font-weight:700;letter-spacing:-.015em;margin-bottom:10px;}
+.value-card p{font-size:15px;color:var(--muted);line-height:1.6;}
+
+/* ── AGENTS ── */
+.agents-section{padding:80px 0;border-top:1px solid var(--border);}
+.agents-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:18px;}
+@media(max-width:600px){.agents-grid{grid-template-columns:1fr;}}
+.agent-card{
+  background:linear-gradient(160deg,var(--panel),var(--panel-2));
+  border:1px solid var(--border);border-radius:var(--r);
+  padding:28px;display:flex;flex-direction:column;gap:12px;
+  transition:border-color .2s,transform .2s;
+}
+.agent-card:hover{border-color:rgba(124,92,255,.3);transform:translateY(-2px);}
+.agent-emoji-wrap{width:52px;height:52px;border-radius:14px;background:rgba(124,92,255,.12);border:1px solid rgba(124,92,255,.2);display:grid;place-items:center;}
+.agent-emoji{font-size:26px;line-height:1;}
+.agent-card h3{font-size:17px;font-weight:700;letter-spacing:-.015em;}
+.agent-card p{font-size:14px;color:var(--muted);line-height:1.55;}
+
+/* ── INTEGRATIONS ── */
+.integrations-section{padding:80px 0;border-top:1px solid var(--border);text-align:center;}
+.marquee-wrap{
+  overflow:hidden;
+  -webkit-mask-image:linear-gradient(to right,transparent,black 12%,black 88%,transparent);
+  mask-image:linear-gradient(to right,transparent,black 12%,black 88%,transparent);
+  margin-top:40px;
+}
+.marquee-track{
+  display:flex;
+  gap:12px;
+  width:max-content;
+  animation:marquee 35s linear infinite;
+}
+.marquee-track:hover{animation-play-state:paused;}
+@keyframes marquee{
+  0%{transform:translateX(0);}
+  100%{transform:translateX(-50%);}
+}
+.marquee-item{
+  display:flex;align-items:center;gap:12px;
+  background:var(--panel);border:1px solid var(--border);
+  border-radius:12px;padding:12px 20px;
+  white-space:nowrap;flex-shrink:0;
+  transition:border-color .15s;
+}
+.marquee-item:hover{border-color:rgba(124,92,255,.4);}
+.marquee-item img{width:32px;height:32px;object-fit:contain;flex-shrink:0;}
+.marquee-item span{font-size:14px;font-weight:600;color:var(--muted);}
+
+/* ── PRICING ── */
+.pricing-section{padding:80px 0;border-top:1px solid var(--border);}
+.tiers{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;align-items:stretch;}
+@media(max-width:880px){.tiers{grid-template-columns:1fr;max-width:460px;margin:0 auto;}}
+.tier{
+  background:linear-gradient(180deg,var(--panel),var(--panel-2));
+  border:1px solid rgba(58,208,255,.18);border-radius:20px;
+  padding:26px 22px 22px;display:flex;flex-direction:column;position:relative;
+  transition:transform .2s,border-color .2s;
+  min-height:0;
+}
+.tier:hover{transform:translateY(-3px);border-color:rgba(58,208,255,.38);}
+.tier.featured{
+  background:linear-gradient(180deg,var(--panel),var(--panel-2)) padding-box,
+              var(--grad) border-box;
+  border:1.5px solid transparent;box-shadow:var(--shadow);
+  padding:34px 28px 28px;
+}
+.tier.featured h3{font-size:22px;}
+.tier.featured .price-big{font-size:34px;}
+.tier.featured ul li{font-size:15px;}
+.badge{
+  position:absolute;top:-11px;left:50%;transform:translateX(-50%);
+  background:var(--grad);color:#0b0f17;
+  font-size:10px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;
+  padding:5px 14px;border-radius:999px;white-space:nowrap;
+}
+.tier-name{font-size:12px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--accent-2);margin-bottom:6px;}
+.tier.featured .tier-name{background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent;}
+.tier h3{font-size:20px;font-weight:800;letter-spacing:-.02em;margin-bottom:8px;line-height:1.2;}
+.tier .tagline{color:var(--muted);font-size:14px;line-height:1.5;margin-bottom:18px;}
+.price-from{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);display:block;margin-bottom:3px;}
+.price-big{font-size:30px;font-weight:800;letter-spacing:-.02em;line-height:1;margin-bottom:3px;}
+.price-scoped-label{font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:6px;margin-top:12px;}
+.price-lets-talk{background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent;font-style:italic;font-size:36px;}
+.price-unit{font-size:15px;font-weight:500;color:var(--muted);margin-left:1px;}
+.price-sub{color:var(--muted);font-size:13px;margin-bottom:16px;line-height:1.4;}
+.tier-meta{display:flex;gap:16px;padding:10px 0;border-top:1px solid var(--border);border-bottom:1px solid var(--border);margin-bottom:16px;}
+.tier-meta-item .lbl{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.09em;color:var(--muted);margin-bottom:2px;}
+.tier-meta-item .val{font-size:14px;font-weight:600;}
+.tier ul{list-style:none;flex:1;margin-bottom:18px;}
+.tier ul li{
+  font-size:14px;line-height:1.45;padding:7px 0 7px 22px;
+  position:relative;color:var(--text);
+}
+.tier ul li::before{
+  content:'';position:absolute;left:0;top:11px;
+  width:13px;height:13px;border-radius:50%;
+  background:var(--grad);
+  mask:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'><path d='M3 8.5l3 3 7-7' fill='none' stroke='white' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'/></svg>") center/contain no-repeat;
+  -webkit-mask:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'><path d='M3 8.5l3 3 7-7' fill='none' stroke='white' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'/></svg>") center/contain no-repeat;
+}
+.tier-cta{
+  display:block;width:100%;padding:12px 16px;border-radius:10px;
+  font-weight:700;font-size:14px;font-family:inherit;cursor:pointer;border:none;
+  text-align:center;text-decoration:none;margin-top:auto;
+  transition:transform .1s,filter .15s,background .2s;
+}
+.tier-cta.primary{background:var(--grad);color:#0b0f17;box-shadow:var(--shadow);}
+.tier-cta.primary:hover{filter:brightness(1.08);transform:translateY(-1px);}
+.tier-cta.secondary{background:rgba(255,255,255,.04);color:var(--text);border:1px solid var(--border);}
+.tier-cta.secondary:hover{background:rgba(255,255,255,.08);}
+
+.blueprint-band{
+  margin-top:28px;padding:20px 24px;
+  background:linear-gradient(135deg,rgba(124,92,255,.10),rgba(58,208,255,.06));
+  border:1px solid rgba(124,92,255,.3);border-radius:var(--r);
+  display:flex;gap:20px;align-items:center;flex-wrap:wrap;
+}
+.blueprint-band .text{flex:1;min-width:240px;}
+.blueprint-band h4{font-size:15px;font-weight:700;margin-bottom:4px;letter-spacing:-.01em;}
+.blueprint-band p{color:var(--muted);font-size:13px;line-height:1.5;}
+.blueprint-band strong{color:var(--text);}
+.blueprint-price{font-size:20px;font-weight:800;margin-right:10px;}
+.pricing-note{
+  text-align:center;color:var(--muted);font-size:12px;
+  margin-top:24px;line-height:1.6;max-width:660px;margin-left:auto;margin-right:auto;
+}
+.pricing-note strong{color:var(--text);}
+
+/* ── CALCULATOR ── */
+.calc-section{padding:80px 0;border-top:1px solid var(--border);}
+.calc-grid{display:grid;grid-template-columns:1.15fr 1fr;gap:18px;}
+@media(max-width:880px){.calc-grid{grid-template-columns:1fr;}}
+.card{
+  background:linear-gradient(180deg,var(--panel),var(--panel-2));
+  border:1px solid var(--border);border-radius:var(--r);padding:28px;
+  box-shadow:0 1px 0 rgba(255,255,255,.03) inset;
+}
+.card h3{font-size:19px;font-weight:700;letter-spacing:-.01em;margin-bottom:5px;}
+.card-sub{color:var(--muted);font-size:15px;margin-bottom:18px;}
+.tasks{display:flex;flex-direction:column;gap:12px;margin-bottom:12px;}
+.task{border:1px solid var(--border);border-radius:12px;padding:16px;background:rgba(255,255,255,.015);transition:border-color .2s;}
+.task:hover{border-color:#3a4560;}
+.task-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;gap:8px;}
+.task-title{
+  flex:1;font-weight:600;font-size:15px;color:var(--text);
+  background:transparent;border:none;outline:none;
+  border-bottom:1px dashed transparent;padding:2px 0;font-family:inherit;width:100%;
+}
+.task-title:focus{border-bottom-color:var(--accent);}
+.remove-btn{
+  background:transparent;border:1px solid var(--border);color:var(--muted);
+  width:27px;height:27px;border-radius:7px;cursor:pointer;
+  display:grid;place-items:center;font-size:15px;transition:all .15s;
+}
+.remove-btn:hover{color:var(--danger);border-color:var(--danger);}
+.fields{display:grid;grid-template-columns:repeat(2,1fr);gap:8px 10px;}
+@media(max-width:460px){.fields{grid-template-columns:1fr;}}
+.field{display:flex;flex-direction:column;gap:4px;}
+.field label{font-size:12px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);font-weight:700;}
+.input-wrap{position:relative;display:flex;align-items:center;}
+.input-wrap .prefix,.input-wrap .suffix{position:absolute;color:var(--muted);font-size:13px;pointer-events:none;}
+.input-wrap .prefix{left:10px;} .input-wrap .suffix{right:10px;}
+input[type="number"],input[type="text"]{
+  width:100%;background:rgba(0,0,0,.3);border:1px solid var(--border);
+  border-radius:8px;color:var(--text);padding:9px 11px;
+  font-size:15px;font-family:inherit;outline:none;
+  transition:border-color .15s,box-shadow .15s;
+}
+input[type="number"].has-prefix{padding-left:30px;}
+input[type="number"].has-suffix{padding-right:30px;}
+input:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(124,92,255,.15);}
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button{-webkit-appearance:none;margin:0;}
+input[type="number"]{-moz-appearance:textfield;}
+.add-btn{
+  width:100%;background:transparent;border:1.5px dashed var(--border);
+  color:var(--muted);padding:12px;border-radius:9px;cursor:pointer;
+  font-size:15px;font-weight:600;font-family:inherit;transition:all .15s;
+}
+.add-btn:hover{color:var(--text);border-color:var(--accent);background:rgba(124,92,255,.06);}
+details.advanced{margin-top:12px;border:1px solid var(--border);border-radius:8px;padding:10px 13px;background:rgba(0,0,0,.15);}
+details.advanced summary{cursor:pointer;color:var(--muted);font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;list-style:none;user-select:none;}
+details.advanced summary::-webkit-details-marker{display:none;}
+details.advanced summary::before{content:"+ ";color:var(--accent);}
+details.advanced[open] summary::before{content:"– ";}
+details.advanced .fields{margin-top:10px;}
+
+/* results */
+.results .big-num{
+  font-size:clamp(36px,5vw,52px);font-weight:800;letter-spacing:-.03em;line-height:1;
+  margin:5px 0 4px;background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent;
+}
+.big-label{color:var(--muted);font-size:12px;text-transform:uppercase;letter-spacing:.08em;font-weight:700;}
+.sub-num{color:var(--muted);font-size:13px;margin-top:4px;}
+.result-stats{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-top:16px;}
+.r-stat{background:rgba(0,0,0,.25);border:1px solid var(--border);border-radius:10px;padding:13px;}
+.r-stat .lbl{color:var(--muted);font-size:11px;text-transform:uppercase;letter-spacing:.08em;font-weight:700;margin-bottom:4px;}
+.r-stat .val{font-size:21px;font-weight:700;letter-spacing:-.02em;}
+.r-stat.good .val{color:var(--good);}
+.r-stat.accent .val{color:var(--accent-2);}
+.divider{height:1px;background:var(--border);margin:18px 0;}
+.investment-box{
+  background:linear-gradient(135deg,rgba(124,92,255,.12),rgba(58,208,255,.08));
+  border:1px solid rgba(124,92,255,.35);border-radius:12px;padding:15px 18px;margin-bottom:14px;
+}
+.inv-row{display:flex;justify-content:space-between;align-items:baseline;gap:8px;}
+.inv-row+.inv-row{margin-top:5px;}
+.inv-row .lbl{color:var(--muted);font-size:13px;}
+.inv-row .amt{font-size:18px;font-weight:700;letter-spacing:-.01em;}
+.inv-row.total .lbl{color:var(--text);font-weight:600;font-size:14px;}
+.inv-divider{height:0;border:none;border-top:1px dashed rgba(255,255,255,.12);margin:8px 0;}
+.inv-note{color:var(--muted);font-size:12px;margin-top:8px;line-height:1.45;}
+.calc-ctas{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px;}
+.calc-ctas .btn{flex:1;min-width:120px;justify-content:center;}
+.calc-assumptions{margin-top:16px;font-size:12px;color:var(--muted);line-height:1.55;}
+.calc-assumptions strong{color:var(--text);}
+
+/* ── FINAL CTA ── */
+.cta-section{padding:80px 0;border-top:1px solid var(--border);text-align:center;}
+.cta-box{
+  background:linear-gradient(135deg,rgba(124,92,255,.12),rgba(58,208,255,.07));
+  border:1px solid rgba(124,92,255,.3);border-radius:24px;
+  padding:52px 40px;max-width:640px;margin:0 auto;
+}
+.cta-box h2{font-size:clamp(22px,4vw,34px);font-weight:800;letter-spacing:-.025em;line-height:1.1;margin-bottom:12px;}
+.cta-box p{color:var(--muted);font-size:15px;line-height:1.5;margin-bottom:26px;}
+
+/* ── FOOTER ── */
+footer{border-top:1px solid var(--border);padding:26px 0;color:var(--muted);font-size:13px;position:relative;z-index:1;}
+.footer-inner{max-width:1120px;margin:0 auto;padding:0 24px;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;}
+.footer-links{display:flex;gap:18px;}
+.footer-links a{color:var(--muted);text-decoration:none;font-size:13px;transition:color .15s;}
+.footer-links a:hover{color:var(--text);}
+
+/* ── TOAST ── */
+.toast{
+  position:fixed;bottom:24px;left:50%;
+  transform:translateX(-50%) translateY(70px);
+  background:var(--panel);border:1px solid var(--border);
+  color:var(--text);padding:10px 18px;border-radius:9px;
+  font-size:13px;box-shadow:var(--shadow);opacity:0;
+  transition:transform .25s,opacity .25s;pointer-events:none;z-index:200;white-space:nowrap;
+}
+.toast.show{transform:translateX(-50%) translateY(0);opacity:1;}
+
+.pulse{animation:pulse .3s ease;}
+@keyframes pulse{0%{transform:scale(1);}50%{transform:scale(1.04);}100%{transform:scale(1);}}
+
+/* ── BOOKING MODAL ── */
+.modal-overlay{
+  position:fixed;inset:0;z-index:500;
+  background:rgba(11,15,23,.85);
+  backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);
+  display:flex;align-items:center;justify-content:center;padding:24px;
+  opacity:0;pointer-events:none;transition:opacity .2s;
+}
+.modal-overlay.open{opacity:1;pointer-events:all;}
+.modal{
+  background:linear-gradient(180deg,var(--panel),var(--panel-2));
+  border:1px solid var(--border);border-radius:20px;
+  padding:28px 28px 22px;max-width:560px;width:100%;
+  box-shadow:var(--shadow);
+  transform:translateY(16px);transition:transform .2s;
+}
+.modal-overlay.open .modal{transform:translateY(0);}
+.modal-header{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;margin-bottom:18px;}
+.modal-header h3{font-size:20px;font-weight:800;letter-spacing:-.02em;line-height:1.2;}
+.modal-close{background:none;border:none;color:var(--muted);cursor:pointer;font-size:20px;padding:0;line-height:1;transition:color .15s;}
+.modal-close:hover{color:var(--text);}
+.modal-sub{font-size:13px;color:var(--muted);margin-top:3px;}
+.modal form{display:flex;flex-direction:column;gap:12px;}
+.modal-field label{display:block;font-size:13px;font-weight:600;color:var(--muted);margin-bottom:5px;letter-spacing:.01em;}
+.modal-field input,
+.modal-field textarea,
+.modal-field select{
+  width:100%;background:rgba(255,255,255,.04);
+  border:1px solid var(--border);border-radius:10px;
+  color:var(--text);font-family:inherit;font-size:15px;
+  padding:10px 13px;transition:border-color .15s;outline:none;
+  appearance:none;-webkit-appearance:none;
+}
+.modal-field input:focus,
+.modal-field textarea:focus,
+.modal-field select:focus{border-color:var(--accent);}
+.modal-field textarea{resize:none;height:64px;line-height:1.5;overflow:hidden;}
+/* custom select */
+.custom-select{position:relative;}
+.custom-select-trigger{
+  width:100%;background:rgba(255,255,255,.04);
+  border:1px solid var(--border);border-radius:10px;
+  color:var(--muted);font-family:inherit;font-size:15px;
+  padding:10px 38px 10px 13px;cursor:pointer;
+  display:flex;align-items:center;justify-content:space-between;
+  transition:border-color .15s,color .15s;user-select:none;
+}
+.custom-select-trigger.has-value{color:var(--text);}
+.custom-select-trigger:hover{border-color:rgba(124,92,255,.4);}
+.custom-select.open .custom-select-trigger{border-color:var(--accent);}
+.custom-select-trigger svg{flex-shrink:0;transition:transform .2s;opacity:.6;}
+.custom-select.open .custom-select-trigger svg{transform:rotate(180deg);}
+.custom-select-dropdown{
+  position:absolute;top:calc(100% + 6px);left:0;right:0;z-index:600;
+  background:var(--panel-2);border:1px solid var(--border);border-radius:12px;
+  padding:6px;box-shadow:0 12px 40px -8px rgba(0,0,0,.6);
+  opacity:0;transform:translateY(-6px);pointer-events:none;
+  transition:opacity .15s,transform .15s;
+}
+.custom-select.open .custom-select-dropdown{opacity:1;transform:translateY(0);pointer-events:all;}
+.custom-select-option{
+  padding:9px 12px;border-radius:8px;font-size:14px;cursor:pointer;
+  color:var(--muted);transition:background .1s,color .1s;
+}
+.custom-select-option:hover{background:rgba(255,255,255,.06);color:var(--text);}
+.custom-select-option.selected{color:var(--accent-2);background:rgba(58,208,255,.08);}
+/* hidden real select for form data */
+.custom-select select{display:none;}
+.modal-actions{display:flex;gap:10px;margin-top:6px;}
+.modal-actions .btn{flex:1;justify-content:center;}
+.modal-tier{display:inline-flex;align-items:center;gap:8px;font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--accent-2);background:rgba(58,208,255,.08);border:1px solid rgba(58,208,255,.2);padding:5px 12px;border-radius:999px;width:fit-content;}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-inner">
+    <a href="#" class="logo">
+      <img src="square_logo.png" alt="Automation Builders" style="width:32px;height:32px;border-radius:9px;object-fit:cover;" />
+      <span>Automation Builders</span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="#agents">Agents</a></li>
+      <li><a href="#pricing">Pricing</a></li>
+      <li><a href="#calculator">Calculator</a></li>
+    </ul>
+    <a href="https://calendly.com/noah-automationbuilders/30min" class="btn btn-primary" target="_blank" rel="noopener" data-tier="Free consult">Book a call →</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="wrap">
+    <div class="eyebrow">AI-Enabled Workflow Automation</div>
+    <h1>Automate to <span class="grad-text">connect</span>.</h1>
+    <p>We find the manual work quietly eating your team's week and rebuild it around what AI does well — reading documents, routing requests, reconciling data, updating systems.</p>
+    <div class="hero-ctas">
+      <a href="https://calendly.com/noah-automationbuilders/30min" class="btn btn-primary btn-lg" target="_blank" rel="noopener" data-tier="Free consult">Book free consultation →</a>
+      <a href="#calculator" class="btn btn-secondary btn-lg">Calculate your savings</a>
+    </div>
+    <div class="flow">
+      <div class="flow-label">Example: Invoice processing automation</div>
+      <div class="flow-steps">
+        <div class="flow-step">
+          <div class="flow-icon">📧</div>
+          <div class="flow-step-label">Invoice arrives by email</div>
+        </div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-step">
+          <div class="flow-icon purple">🤖</div>
+          <div class="flow-step-label">AI extracts line items &amp; totals</div>
+        </div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-step">
+          <div class="flow-icon">🔍</div>
+          <div class="flow-step-label">Matched to supplier &amp; PO</div>
+        </div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-step">
+          <div class="flow-icon cyan">📊</div>
+          <div class="flow-step-label">Xero / QB updated automatically</div>
+        </div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-step">
+          <div class="flow-icon green">✅</div>
+          <div class="flow-step-label">Approval sent &amp; payment scheduled</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- VALUE PROPS -->
+<section class="value-section" style="border-top:1px solid var(--border);">
+  <div class="wrap">
+    <div class="section-header">
+      <h2>The case for automating now</h2>
+      <p>Manual processes compound over time. Every hour on repetitive work is an hour lost on growth.</p>
+    </div>
+    <div class="value-grid">
+      <div class="value-card">
+        <div class="value-icon purple">⚡</div>
+        <h3>Save Time</h3>
+        <p>Stop completing the same repeatable processes by hand. Let AI handle the steps your team dreads — and free them up for work that actually matters.</p>
+      </div>
+      <div class="value-card">
+        <div class="value-icon cyan">💰</div>
+        <h3>Cut Costs</h3>
+        <p>Reduce unnecessary business expenses without reducing headcount. Automation returns more than it costs, usually within the first year.</p>
+      </div>
+      <div class="value-card">
+        <div class="value-icon green">📈</div>
+        <h3>Prepare for Scale</h3>
+        <p>Build processes that grow with your business. Automate the foundations so doubling revenue doesn't mean doubling admin.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- AGENTS -->
+<section class="agents-section" id="agents">
+  <div class="wrap">
+    <div class="section-header">
+      <h2>Six agent types, <span class="grad-text">one team</span></h2>
+      <p>Purpose-built AI agents across the parts of your business that burn the most manual time.</p>
+    </div>
+    <div class="agents-grid">
+      <div class="agent-card">
+        <div class="agent-emoji-wrap"><div class="agent-emoji">🚀</div></div>
+        <h3>Onboarding Agents</h3>
+        <p>Automate client and employee onboarding from form submission through to account setup, notifications, and task creation.</p>
+      </div>
+      <div class="agent-card">
+        <div class="agent-emoji-wrap"><div class="agent-emoji">💬</div></div>
+        <h3>Customer Support Agents</h3>
+        <p>Triage, classify, and resolve support tickets automatically — with human escalation only when it counts.</p>
+      </div>
+      <div class="agent-card">
+        <div class="agent-emoji-wrap"><div class="agent-emoji">📊</div></div>
+        <h3>Reporting Agents</h3>
+        <p>Pull data from your stack, generate formatted reports, and distribute them — without anyone touching a spreadsheet.</p>
+      </div>
+      <div class="agent-card">
+        <div class="agent-emoji-wrap"><div class="agent-emoji">🗂️</div></div>
+        <h3>CRM Enrichment Agents</h3>
+        <p>Keep your CRM clean — auto-enriching contacts, logging activity, and surfacing high-value signals for your sales team.</p>
+      </div>
+      <div class="agent-card">
+        <div class="agent-emoji-wrap"><div class="agent-emoji">📣</div></div>
+        <h3>Marketing Agents</h3>
+        <p>Automate content distribution, lead scoring, campaign triggers, and follow-up sequences across your marketing stack.</p>
+      </div>
+      <div class="agent-card">
+        <div class="agent-emoji-wrap"><div class="agent-emoji">🧑‍💼</div></div>
+        <h3>Recruitment Agents</h3>
+        <p>Screen applicants, schedule interviews, send status updates, and keep your ATS in sync — without manual coordination.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- INTEGRATIONS -->
+<section class="integrations-section">
+  <div class="wrap">
+    <div class="section-header">
+      <h2>Works with your existing stack</h2>
+      <p>We connect the tools you already use across 500+ applications — without replacing them.</p>
+    </div>
+    <div class="marquee-wrap">
+      <div class="marquee-track" aria-hidden="true">
+        <!-- first copy — all colours chosen to be clearly visible on dark bg -->
+        <div class="marquee-item"><img src="https://cdn.simpleicons.org/hubspot/FF7A59" alt="" /><span>HubSpot</span></div>
+        <div class="marquee-item"><img src="https://cdn.simpleicons.org/notion/FFFFFF" alt="" /><span>Notion</span></div>
+        <div class="marquee-item"><img src="https://cdn.simpleicons.org/airtable/18BFFF" alt="" /><span>Airtable</span></div>
+        <div class="marquee-item"><img src="https://cdn.simpleicons.org/xero/13B5EA" alt="" /><span>Xero</span></div>
+        <div class="marquee-item"><img src="https://cdn.simpleicons.org/quickbooks/2CA01C" alt="" /><span>QuickBooks</span></div>
+        <div class="marquee-item"><img src="https://cdn.simpleicons.org/jira/2684FF" alt="" /><span>Jira</span></div>
+        <div class="marquee-item"><img src="https://cdn.simpleicons.org/zendesk/1F73B7" alt="" /><span>Zendesk</span></div>
+        <div class="marquee-item"><img src="https://cdn.simpleicons.org/intercom/1F8DED" alt="" /><span>Intercom</span></div>
+        <div class="marquee-item"><img src="https://cdn.simpleicons.org/make/A259FF" alt="" /><span>Make</span></div>
+        <div class="marquee-item"><img src="https://cdn.simpleicons.org/zapier/FF4A00" alt="" /><span>Zapier</span></div>
+        <div class="marquee-item"><img src="https://cdn.simpleicons.org/n8n/EA4B71" alt="" /><span>n8n</span></div>
+        <div class="marquee-item"><img src="https://cdn.simpleicons.org/snowflake/29B5E8" alt="" /><span>Snowflake</span></div>
+        <div class="marquee-item"><img src="https://cdn.simpleicons.org/postgresql/4169E1" alt="" /><span>Postgres</span></div>
+        <div class="marquee-item"><img src="https://cdn.simpleicons.org/stripe/635BFF" alt="" /><span>Stripe</span></div>
+        <div class="marquee-item"><img src="https://cdn.simpleicons.org/asana/F06A6A" alt="" /><span>Asana</span></div>
+        <div class="marquee-item"><img src="https://cdn.simpleicons.org/linear/5E6AD2" alt="" /><span>Linear</span></div>
+        <div class="marquee-item"><img src="https://cdn.simpleicons.org/clickup/7B68EE" alt="" /><span>ClickUp</span></div>
+        <!-- second copy for seamless loop -->
+        <div class="marquee-item"><img src="https://cdn.simpleicons.org/hubspot/FF7A59" alt="" /><span>HubSpot</span></div>
+        <div class="marquee-item"><img src="https://cdn.simpleicons.org/notion/FFFFFF" alt="" /><span>Notion</span></div>
+        <div class="marquee-item"><img src="https://cdn.simpleicons.org/airtable/18BFFF" alt="" /><span>Airtable</span></div>
+        <div class="marquee-item"><img src="https://cdn.simpleicons.org/xero/13B5EA" alt="" /><span>Xero</span></div>
+        <div class="marquee-item"><img src="https://cdn.simpleicons.org/quickbooks/2CA01C" alt="" /><span>QuickBooks</span></div>
+        <div class="marquee-item"><img src="https://cdn.simpleicons.org/jira/2684FF" alt="" /><span>Jira</span></div>
+        <div class="marquee-item"><img src="https://cdn.simpleicons.org/zendesk/1F73B7" alt="" /><span>Zendesk</span></div>
+        <div class="marquee-item"><img src="https://cdn.simpleicons.org/intercom/1F8DED" alt="" /><span>Intercom</span></div>
+        <div class="marquee-item"><img src="https://cdn.simpleicons.org/make/A259FF" alt="" /><span>Make</span></div>
+        <div class="marquee-item"><img src="https://cdn.simpleicons.org/zapier/FF4A00" alt="" /><span>Zapier</span></div>
+        <div class="marquee-item"><img src="https://cdn.simpleicons.org/n8n/EA4B71" alt="" /><span>n8n</span></div>
+        <div class="marquee-item"><img src="https://cdn.simpleicons.org/snowflake/29B5E8" alt="" /><span>Snowflake</span></div>
+        <div class="marquee-item"><img src="https://cdn.simpleicons.org/postgresql/4169E1" alt="" /><span>Postgres</span></div>
+        <div class="marquee-item"><img src="https://cdn.simpleicons.org/stripe/635BFF" alt="" /><span>Stripe</span></div>
+        <div class="marquee-item"><img src="https://cdn.simpleicons.org/asana/F06A6A" alt="" /><span>Asana</span></div>
+        <div class="marquee-item"><img src="https://cdn.simpleicons.org/linear/5E6AD2" alt="" /><span>Linear</span></div>
+        <div class="marquee-item"><img src="https://cdn.simpleicons.org/clickup/7B68EE" alt="" /><span>ClickUp</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PRICING -->
+<section class="pricing-section" id="pricing">
+  <div class="wrap">
+    <div class="section-header">
+      <h2>Pricing built around <span class="grad-text">what it's worth</span></h2>
+      <p>Three ways to work with us. Fixed fees. No hourly rates. Every build ships with 12 months of Automation Care bundled in.</p>
+    </div>
+    <div class="tiers">
+      <div class="tier">
+        <div class="tier-name">Build</div>
+        <h3>Prove the model on one process</h3>
+        <p class="tagline">Best for teams with one high-pain, repeatable workflow ready to be automated end-to-end — and kept running.</p>
+        <span class="price-from">From</span>
+        <div class="price-big">A$10,000</div>
+        <div class="price-sub">fixed build · then A$250/mo · all ex GST</div>
+        <div class="tier-meta">
+          <div class="tier-meta-item"><div class="lbl">Timeline</div><div class="val">2–3 weeks</div></div>
+          <div class="tier-meta-item"><div class="lbl">Scope</div><div class="val">1–2 processes</div></div>
+        </div>
+        <ul>
+          <li>1–2 connected automations</li>
+          <li>Joint discovery session to sequence by ROI, not guesswork</li>
+          <li>12 months of Automation Care — across every workflow</li>
+          <li>30-day post-launch hypercare with direct founder access</li>
+          <li>Australian team, same timezone, one accountable point of contact</li>
+        </ul>
+        <a href="https://calendly.com/noah-automationbuilders/30min" class="tier-cta secondary" data-tier="Build">Start with a Build →</a>
+      </div>
+
+      <div class="tier featured">
+        <div class="badge">Most popular</div>
+        <div class="tier-name">Engine</div>
+        <h3>A cluster of automations, built as one</h3>
+        <p class="tagline">Best when 3–6 related processes need to be automated together for compounding returns.</p>
+        <span class="price-from">From</span>
+        <div class="price-big">A$30,000</div>
+        <div class="price-sub">fixed build · then A$500/mo · all ex GST</div>
+        <div class="tier-meta">
+          <div class="tier-meta-item"><div class="lbl">Timeline</div><div class="val">4–8 weeks</div></div>
+          <div class="tier-meta-item"><div class="lbl">Scope</div><div class="val">3–6 processes</div></div>
+        </div>
+        <ul>
+          <li>3–6 connected automations</li>
+          <li>Joint discovery session to sequence by ROI, not guesswork</li>
+          <li>12 months of Automation Care — across every workflow</li>
+          <li>Priority support and in-flight change requests</li>
+          <li>Australian team, same timezone, one accountable point of contact</li>
+        </ul>
+        <a href="https://calendly.com/noah-automationbuilders/30min" class="tier-cta primary" data-tier="Engine">Scope an Engine →</a>
+      </div>
+
+      <div class="tier">
+        <div class="tier-name">Partner</div>
+        <h3>We become your automation function</h3>
+        <p class="tagline">Best for teams with a continuous automation backlog and clear executive sponsorship.</p>
+        <div class="price-scoped-label">Scoped to your backlog</div>
+        <div class="price-big price-lets-talk">Let's talk</div>
+        <div class="price-sub">Monthly retainer · sized to your volume, systems, and pace · ex GST</div>
+        <div class="tier-meta">
+          <div class="tier-meta-item"><div class="lbl">Cadence</div><div class="val">Continuous</div></div>
+          <div class="tier-meta-item"><div class="lbl">Scope</div><div class="val">Ongoing pipeline</div></div>
+        </div>
+        <ul>
+          <li>Unlimited automations</li>
+          <li>Joint discovery session to sequence by ROI, not guesswork</li>
+          <li>Continuous build, deploy, and maintain</li>
+          <li>All Care included — nothing extra to buy</li>
+          <li>Unlimited minor changes across the stack</li>
+          <li>Australian team, same timezone, one accountable point of contact</li>
+        </ul>
+        <a href="https://calendly.com/noah-automationbuilders/30min" class="tier-cta secondary" data-tier="Partnership">Talk about a Partnership →</a>
+      </div>
+    </div>
+
+    <div class="blueprint-band">
+      <div class="text">
+        <h4>Not sure which tier fits?</h4>
+        <p>Start with the <strong>Automation Blueprint</strong> — a two-week paid scoping engagement. We map your processes, rank them by ROI, and give you a fixed-price plan. Credited against your first build.</p>
+      </div>
+      <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap;">
+        <span class="blueprint-price">A$2,500</span>
+        <a href="https://calendly.com/noah-automationbuilders/30min" class="btn btn-primary" data-tier="Blueprint">Book the Blueprint →</a>
+      </div>
+    </div>
+
+    <p class="pricing-note">
+      <strong>All engagements include 12 months of Automation Care</strong> — uptime monitoring, breakage fixes within 48 business hours, minor adjustments, and quarterly health checks. Minimum engagement A$10,000. Final scope confirmed on a discovery call.
+    </p>
+  </div>
+</section>
+
+<!-- CALCULATOR -->
+<section class="calc-section" id="calculator">
+  <div class="wrap">
+    <div class="section-header">
+      <h2>See what manual work is <span class="grad-text">actually costing you</span></h2>
+      <p>Enter your team's repeatable processes and get the real annual cost, 3-year burn, and what automation is worth — in under 60 seconds.</p>
+    </div>
+    <div class="calc-grid">
+      <div class="card">
+        <h3>Your manual processes</h3>
+        <div class="card-sub">Add each repeatable task your team does by hand. Be generous — most people underestimate.</div>
+        <div class="tasks" id="tasks"></div>
+        <button class="add-btn" id="addTask">+ Add another process</button>
+        <details class="advanced">
+          <summary>Global assumptions</summary>
+          <div class="fields">
+            <div class="field">
+              <label>Working weeks / year</label>
+              <div class="input-wrap"><input type="number" id="weeks" value="48" min="1" max="52" /></div>
+            </div>
+            <div class="field">
+              <label>On-cost multiplier</label>
+              <div class="input-wrap">
+                <input type="number" id="oncost" value="1.3" min="1" max="2" step="0.05" class="has-suffix" />
+                <span class="suffix">×</span>
+              </div>
+            </div>
+            <div class="field">
+              <label>Annual growth</label>
+              <div class="input-wrap">
+                <input type="number" id="growth" value="10" min="0" max="100" step="1" class="has-suffix" />
+                <span class="suffix">%</span>
+              </div>
+            </div>
+            <div class="field">
+              <label>Error / rework cost</label>
+              <div class="input-wrap">
+                <input type="number" id="errorPct" value="5" min="0" max="50" step="1" class="has-suffix" />
+                <span class="suffix">%</span>
+              </div>
+            </div>
+          </div>
+          <p style="font-size:11px;color:var(--muted);margin-top:8px;line-height:1.5;">On-cost multiplier accounts for super, tax, software, and management overhead. Industry standard: 1.25–1.4×.</p>
+        </details>
+      </div>
+
+      <div class="card results">
+        <div class="big-label">Value unlocked over 3 years</div>
+        <div class="big-num" id="bigNumber">A$0</div>
+        <div class="sub-num" id="subNumber">Add a process to see the numbers.</div>
+        <div class="result-stats">
+          <div class="r-stat"><div class="lbl">Hours burned / year</div><div class="val" id="hoursYear">0</div></div>
+          <div class="r-stat"><div class="lbl">Cost / year</div><div class="val" id="costYear">A$0</div></div>
+          <div class="r-stat accent"><div class="lbl">FTE equivalent</div><div class="val" id="fte">0.0</div></div>
+          <div class="r-stat good"><div class="lbl">5-year cost of inaction</div><div class="val" id="cost5">A$0</div></div>
+        </div>
+        <div class="divider"></div>
+        <div class="investment-box">
+          <div class="inv-row">
+            <div class="lbl">One-off build fee</div>
+            <div class="amt" id="fee">A$0</div>
+          </div>
+          <div class="inv-row">
+            <div class="lbl">Automation Care (included)</div>
+            <div class="amt" id="careMonthly">A$0<span style="font-size:11px;font-weight:500;color:var(--muted);"> /mo</span></div>
+          </div>
+          <hr class="inv-divider" />
+          <div class="inv-row total">
+            <div class="lbl">Year-1 total investment</div>
+            <div class="amt" id="yearOneTotal">A$0</div>
+          </div>
+          <div class="inv-row">
+            <div class="lbl">Net year-1 savings</div>
+            <div class="amt" id="netYear1" style="color:var(--good);">A$0</div>
+          </div>
+          <div class="inv-row">
+            <div class="lbl">Payback period</div>
+            <div class="amt" id="payback" style="color:var(--accent-2);">— months</div>
+          </div>
+          <div class="inv-note">Minimum engagement A$10,000. Automation Care — monitoring, maintenance, minor changes, quarterly health check — included for 12 months. Final scope confirmed on a discovery call.</div>
+        </div>
+        <div class="calc-ctas">
+          <a href="https://calendly.com/noah-automationbuilders/30min" class="btn btn-primary" id="bookCall" target="_blank" rel="noopener" data-tier="Free consult">Book a discovery call →</a>
+          <button class="btn btn-secondary" id="copySummary">Copy summary</button>
+        </div>
+        <div class="calc-assumptions">
+          <strong>How we calculate:</strong> Annual cost = people × hours/week × weeks × rate × on-cost, plus rework. 3-year value compounds at your growth rate. Build fee is 30% of year-one value (A$10K floor). Automation Care is 15% of the build per year (A$250/month floor).
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FINAL CTA -->
+<section class="cta-section">
+  <div class="wrap">
+    <div class="cta-box">
+      <h2>Ready to stop doing it by hand?</h2>
+      <p>Book a free 30-minute consultation. We'll look at your manual processes and discuss the most valuable automations for your business.</p>
+      <a href="https://calendly.com/noah-automationbuilders/30min" class="btn btn-primary btn-lg" target="_blank" rel="noopener" data-tier="Free consult">Book free consultation →</a>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <a href="#" class="logo" style="font-size:14px;">
+      <img src="square_logo.png" alt="Automation Builders" style="width:28px;height:28px;border-radius:7px;object-fit:cover;" />
+      <span>Automation Builders</span>
+    </a>
+    <div class="footer-links">
+      <a href="mailto:support@automationbuilders.ai">support@automationbuilders.ai</a>
+      <a href="terms-of-service.html">Terms of Service</a>
+      <a href="privacy-policy.html">Privacy Policy</a>
+    </div>
+    <div>© 2026 Automation Builders Pty Ltd</div>
+  </div>
+</footer>
+
+<div class="toast" id="toast">Summary copied to clipboard ✓</div>
+
+<!-- BOOKING MODAL -->
+<div class="modal-overlay" id="bookingModal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+  <div class="modal">
+    <div class="modal-tier" id="modalTier" style="display:none;margin-bottom:12px;"></div>
+    <div class="modal-header">
+      <div>
+        <h3 id="modalTitle">Before we meet</h3>
+        <p class="modal-sub">Takes 60 seconds — helps us make the most of your time.</p>
+      </div>
+      <button class="modal-close" id="modalClose" aria-label="Close">✕</button>
+    </div>
+    <form id="bookingForm">
+      <div class="modal-field">
+        <label for="mName">Your name</label>
+        <input type="text" id="mName" name="name" placeholder="e.g. Sarah Chen" required />
+      </div>
+      <div class="modal-field">
+        <label for="mCompany">Company</label>
+        <input type="text" id="mCompany" name="company" placeholder="e.g. Acme Co." />
+      </div>
+      <div class="modal-field">
+        <label for="mPain">What's your biggest manual process or time drain right now?</label>
+        <textarea id="mPain" name="pain" placeholder="e.g. We manually reconcile invoices every week — takes the team 6 hours"></textarea>
+      </div>
+      <div class="modal-field">
+        <label for="mTools">What tools &amp; software does your team currently use?</label>
+        <input type="text" id="mTools" name="tools" placeholder="e.g. HubSpot, Xero, Gmail, Slack" />
+      </div>
+      <div class="modal-field">
+        <label>How urgent is this for you?</label>
+        <div class="custom-select" data-name="urgency">
+          <div class="custom-select-trigger" tabindex="0">
+            <span class="cs-label">Select one…</span>
+            <svg width="12" height="8" viewBox="0 0 12 8" fill="none"><path d="M1 1l5 5 5-5" stroke="#8b9ab8" stroke-width="1.5" stroke-linecap="round"/></svg>
+          </div>
+          <div class="custom-select-dropdown">
+            <div class="custom-select-option" data-value="Just exploring">Just exploring</div>
+            <div class="custom-select-option" data-value="Within 3 months">Within 3 months</div>
+            <div class="custom-select-option" data-value="ASAP">ASAP</div>
+          </div>
+          <select id="mUrgency" name="urgency"><option value=""></option></select>
+        </div>
+      </div>
+      <div class="modal-field">
+        <label>Roughly how many people are affected by this process?</label>
+        <div class="custom-select" data-name="size">
+          <div class="custom-select-trigger" tabindex="0">
+            <span class="cs-label">Select one…</span>
+            <svg width="12" height="8" viewBox="0 0 12 8" fill="none"><path d="M1 1l5 5 5-5" stroke="#8b9ab8" stroke-width="1.5" stroke-linecap="round"/></svg>
+          </div>
+          <div class="custom-select-dropdown">
+            <div class="custom-select-option" data-value="Just me">Just me</div>
+            <div class="custom-select-option" data-value="2–5">2–5</div>
+            <div class="custom-select-option" data-value="6–20">6–20</div>
+            <div class="custom-select-option" data-value="20+">20+</div>
+          </div>
+          <select id="mSize" name="size"><option value=""></option></select>
+        </div>
+      </div>
+      <div class="modal-actions">
+        <button type="button" class="btn btn-secondary" id="modalCancel">Cancel</button>
+        <button type="submit" class="btn btn-primary">Book my call →</button>
+      </div>
+      <p style="font-size:11px;color:var(--muted);margin-top:10px;line-height:1.5;">Your information is used solely to prepare for your consultation. View our <a href="https://www.automationbuilders.ai/privacy-policy" target="_blank" rel="noopener" style="color:var(--muted);text-decoration:underline;">Privacy Policy</a>.</p>
+    </form>
+  </div>
+</div>
+
+<script>
+const AUD  = new Intl.NumberFormat('en-AU',{style:'currency',currency:'AUD',maximumFractionDigits:0});
+const NUM  = new Intl.NumberFormat('en-AU',{maximumFractionDigits:0});
+const DEC  = new Intl.NumberFormat('en-AU',{maximumFractionDigits:1});
+
+const MIN_FEE    = 10000;
+const FEE_RATE   = 0.30;
+const CARE_RATE  = 0.15;
+const CARE_FLOOR = 250;
+
+let tasks = [{name:'Invoice processing',people:2,hrs:6,rate:55,pct:90}];
+
+const tasksEl    = document.getElementById('tasks');
+const weeksEl    = document.getElementById('weeks');
+const oncostEl   = document.getElementById('oncost');
+const growthEl   = document.getElementById('growth');
+const errorPctEl = document.getElementById('errorPct');
+
+function taskRow(t, idx) {
+  const wrap = document.createElement('div');
+  wrap.className = 'task';
+  wrap.innerHTML = `
+    <div class="task-head">
+      <input class="task-title" value="${t.name}" placeholder="Process name" data-field="name" />
+      <button class="remove-btn" title="Remove">×</button>
+    </div>
+    <div class="fields">
+      <div class="field">
+        <label>People doing it</label>
+        <div class="input-wrap"><input type="number" value="${t.people}" min="0" step="1" data-field="people" /></div>
+      </div>
+      <div class="field">
+        <label>Hours / person / week</label>
+        <div class="input-wrap"><input type="number" value="${t.hrs}" min="0" step="0.5" data-field="hrs" /></div>
+      </div>
+      <div class="field">
+        <label>Hourly rate</label>
+        <div class="input-wrap">
+          <span class="prefix">A$</span>
+          <input type="number" class="has-prefix" value="${t.rate}" min="0" step="1" data-field="rate" />
+        </div>
+      </div>
+      <div class="field">
+        <label>% automatable</label>
+        <div class="input-wrap">
+          <input type="number" class="has-suffix" value="${t.pct}" min="0" max="100" step="5" data-field="pct" />
+          <span class="suffix">%</span>
+        </div>
+      </div>
+    </div>`;
+  wrap.querySelectorAll('input[data-field]').forEach(inp => {
+    inp.addEventListener('input', e => {
+      const f = e.target.dataset.field;
+      tasks[idx][f] = f === 'name' ? e.target.value : parseFloat(e.target.value) || 0;
+      compute();
+    });
+  });
+  wrap.querySelector('.remove-btn').addEventListener('click', () => { tasks.splice(idx,1); render(); });
+  return wrap;
+}
+
+function render() {
+  tasksEl.innerHTML = '';
+  tasks.forEach((t,i) => tasksEl.appendChild(taskRow(t,i)));
+  compute();
+}
+
+function compute() {
+  const weeks    = parseFloat(weeksEl.value)    || 48;
+  const oncost   = parseFloat(oncostEl.value)   || 1.3;
+  const growth   = (parseFloat(growthEl.value)  || 0) / 100;
+  const errorPct = (parseFloat(errorPctEl.value)|| 0) / 100;
+
+  let hoursYear = 0, costYear = 0;
+  tasks.forEach(t => {
+    const auto = (t.pct||0)/100;
+    const hrs  = (t.people||0)*(t.hrs||0)*weeks*auto;
+    const cost = hrs*(t.rate||0)*oncost*(1+errorPct);
+    hoursYear += hrs; costYear += cost;
+  });
+
+  const threeYr = growth === 0 ? costYear*3 : costYear*((Math.pow(1+growth,3)-1)/growth);
+  const fiveYr  = growth === 0 ? costYear*5 : costYear*((Math.pow(1+growth,5)-1)/growth);
+  const fte     = hoursYear/(weeks*38);
+
+  const rawFee  = costYear*FEE_RATE;
+  const fee     = Math.max(rawFee, costYear>0 ? MIN_FEE : 0);
+  const careMonthly  = costYear>0 ? Math.max(CARE_FLOOR,(fee*CARE_RATE)/12) : 0;
+  const yearOneTotal = fee + careMonthly*12;
+  const netYear1     = costYear - yearOneTotal;
+  const paybackMo    = costYear>0 ? yearOneTotal/(costYear/12) : 0;
+
+  const big = document.getElementById('bigNumber');
+  big.textContent = AUD.format(threeYr);
+  big.classList.remove('pulse'); void big.offsetWidth; big.classList.add('pulse');
+
+  document.getElementById('subNumber').textContent =
+    tasks.length === 0
+      ? 'Add a process to see the numbers.'
+      : `Across ${tasks.length} process${tasks.length===1?'':'es'}, growing at ${(growth*100).toFixed(0)}%/year.`;
+
+  document.getElementById('hoursYear').textContent  = NUM.format(hoursYear);
+  document.getElementById('costYear').textContent   = AUD.format(costYear);
+  document.getElementById('fte').textContent        = DEC.format(fte);
+  document.getElementById('cost5').textContent      = AUD.format(fiveYr);
+  document.getElementById('fee').textContent        = AUD.format(fee);
+  document.getElementById('careMonthly').innerHTML  =
+    `${AUD.format(careMonthly)}<span style="font-size:11px;font-weight:500;color:var(--muted);"> /mo</span>`;
+  document.getElementById('yearOneTotal').textContent = AUD.format(yearOneTotal);
+  document.getElementById('netYear1').textContent   = AUD.format(Math.max(0,netYear1));
+  document.getElementById('payback').textContent    =
+    paybackMo>0&&paybackMo<120 ? `${paybackMo.toFixed(1)} months` : '— months';
+}
+
+document.getElementById('addTask').addEventListener('click', () => {
+  tasks.push({name:'',people:1,hrs:5,rate:50,pct:80}); render();
+});
+[weeksEl,oncostEl,growthEl,errorPctEl].forEach(el => el.addEventListener('input',compute));
+
+document.getElementById('copySummary').addEventListener('click', async () => {
+  const lines = [
+    'Automation Builders — value snapshot','—',
+    `Manual work cost: ${document.getElementById('costYear').textContent}/year  (${document.getElementById('hoursYear').textContent} hrs · ${document.getElementById('fte').textContent} FTE)`,
+    `3-year cost of inaction: ${document.getElementById('bigNumber').textContent}`,'',
+    'Indicative engagement:',
+    `  • One-off build fee: ${document.getElementById('fee').textContent}`,
+    `  • Automation Care (12 months): ${document.getElementById('careMonthly').textContent.replace(/\s+/g,' ').trim()}`,
+    `  • Year-1 total investment: ${document.getElementById('yearOneTotal').textContent}`,
+    `  • Net year-1 savings: ${document.getElementById('netYear1').textContent}`,
+    `  • Payback: ${document.getElementById('payback').textContent}`,'',
+    'Processes:',
+    ...tasks.map(t=>`  • ${t.name||'Untitled'} — ${t.people}p × ${t.hrs}h/wk × A$${t.rate}/hr (${t.pct}% automatable)`)
+  ].join('\n');
+  try { await navigator.clipboard.writeText(lines); } catch {}
+  const toast = document.getElementById('toast');
+  toast.classList.add('show');
+  setTimeout(()=>toast.classList.remove('show'),1800);
+});
+
+render();
+
+/* ── CUSTOM SELECTS ── */
+document.querySelectorAll('.custom-select').forEach(cs => {
+  const trigger  = cs.querySelector('.custom-select-trigger');
+  const label    = cs.querySelector('.cs-label');
+  const dropdown = cs.querySelector('.custom-select-dropdown');
+  const hidden   = cs.querySelector('select');
+
+  function open()  { cs.classList.add('open'); }
+  function close() { cs.classList.remove('open'); }
+  function toggle(){ cs.classList.contains('open') ? close() : open(); }
+
+  trigger.addEventListener('click', e => { e.stopPropagation(); toggle(); });
+  trigger.addEventListener('keydown', e => { if(e.key===' '||e.key==='Enter'){ e.preventDefault(); toggle(); }});
+
+  dropdown.querySelectorAll('.custom-select-option').forEach(opt => {
+    opt.addEventListener('click', () => {
+      const val = opt.dataset.value;
+      label.textContent = val;
+      trigger.classList.add('has-value');
+      dropdown.querySelectorAll('.custom-select-option').forEach(o => o.classList.remove('selected'));
+      opt.classList.add('selected');
+      hidden.innerHTML = `<option value="${val}" selected>${val}</option>`;
+      close();
+    });
+  });
+});
+document.addEventListener('click', () => {
+  document.querySelectorAll('.custom-select.open').forEach(cs => cs.classList.remove('open'));
+});
+
+document.getElementById('mPain').addEventListener('input', function(){
+  this.style.height = '64px';
+  this.style.height = this.scrollHeight + 'px';
+});
+
+/* ── BOOKING MODAL ── */
+const CALENDLY_URL = 'https://calendly.com/noah-automationbuilders/30min';
+// SLACK: paste your webhook URL below when the site goes live
+const SLACK_WEBHOOK = '';
+
+const modal   = document.getElementById('bookingModal');
+const form    = document.getElementById('bookingForm');
+
+function openModal(e) {
+  e.preventDefault();
+  const tier = e.currentTarget.dataset.tier || '';
+  const tierEl = document.getElementById('modalTier');
+  if (tier) {
+    tierEl.textContent = tier;
+    tierEl.style.display = 'inline-flex';
+  } else {
+    tierEl.style.display = 'none';
+  }
+  modal.classList.add('open');
+  document.getElementById('mName').focus();
+}
+function closeModal() {
+  modal.classList.remove('open');
+  form.reset();
+  document.querySelectorAll('.custom-select').forEach(cs => {
+    cs.querySelector('.cs-label').textContent = 'Select one…';
+    cs.querySelector('.custom-select-trigger').classList.remove('has-value');
+    cs.querySelectorAll('.custom-select-option').forEach(o => o.classList.remove('selected'));
+    cs.querySelector('select').innerHTML = '<option value=""></option>';
+  });
+}
+
+document.querySelectorAll('a[href="' + CALENDLY_URL + '"]').forEach(a => {
+  a.addEventListener('click', openModal);
+});
+document.getElementById('modalClose').addEventListener('click', closeModal);
+document.getElementById('modalCancel').addEventListener('click', closeModal);
+modal.addEventListener('click', e => { if (e.target === modal) closeModal(); });
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+
+form.addEventListener('submit', async e => {
+  e.preventDefault();
+  const data = {
+    tier:    document.getElementById('modalTier').textContent.trim(),
+    name:    document.getElementById('mName').value.trim(),
+    company: document.getElementById('mCompany').value.trim(),
+    pain:    document.getElementById('mPain').value.trim(),
+    tools:   document.getElementById('mTools').value.trim(),
+    urgency: document.getElementById('mUrgency').value,
+    size:    document.getElementById('mSize').value,
+  };
+
+  if (SLACK_WEBHOOK) {
+    const text = [
+      `*📅 New consultation booked${data.tier ? ' — ' + data.tier : ''}*`,
+      `*Name:* ${data.name || '—'}`,
+      `*Company:* ${data.company || '—'}`,
+      `*Pain point:* ${data.pain || '—'}`,
+      `*Tools:* ${data.tools || '—'}`,
+      `*Urgency:* ${data.urgency || '—'}`,
+      `*Team size:* ${data.size || '—'}`,
+    ].join('\n');
+    fetch(SLACK_WEBHOOK, {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({ text }),
+    }).catch(() => {});
+  }
+
+  closeModal();
+  window.open(CALENDLY_URL, '_blank', 'noopener');
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,46 @@
+# Drop the block below at https://automationbuilders.ai/llms.txt
+# Validate at https://llmstxt.org/ before deploying.
+# A second copy lives at /llms.txt at the Website repo root, ready to deploy as-is.
+
+```
+# Automation Builders
+
+> An Australian, founder-led AI workflow automation studio. We give 20–500-person teams back 20+ hours a week by building, deploying, and maintaining custom automations across the tools they already use. Ongoing Automation Care is included at the industry-standard 15% of build per year — the same model top enterprise vendors charge for support contracts.
+
+## Product
+- [Homepage and ROI Calculator](https://automationbuilders.ai/): Interactive calculator that turns a team's manual processes into a 3-year cost-of-inaction number; the authoritative entry point to what we do, how we price, and how to book.
+- [What we build](https://automationbuilders.ai/#agents): Three categories of automation — revenue-side (CRM, lead routing), operations (onboarding, support, reporting), and back-office (invoicing, recruitment, reconciliation) — with sample processes you can drop into the calculator.
+- [How it works](https://automationbuilders.ai/#process): The three-stage engagement — Day 0 discovery call, Day 2–5 fixed-scope Automation Assessment, Day 14–30 first automation live.
+
+## Company
+- [About Automation Builders](https://automationbuilders.ai/#trust): Founded and personally signed off on by Noah Webb. Australian team, same-timezone delivery, one accountable point of contact per engagement.
+- [FAQ](https://automationbuilders.ai/#faq): Authoritative answers on SLA, IP ownership, data security, exit terms, and how the build is priced — the questions CEOs actually ask before they buy.
+- [Book a discovery call](https://calendly.com/noah-automationbuilders/30min): 30-minute call that maps the top three manual processes by ROI and produces a fixed-scope Automation Assessment.
+
+## Legal
+- [Privacy Policy](https://automationbuilders.ai/privacy-policy.html): How we collect, store, and use customer and prospect data.
+- [Terms of Service](https://automationbuilders.ai/terms-of-service.html): Engagement, payment, IP, and exit terms for every Automation Builders build.
+
+## Optional
+- [Email support](mailto:support@automationbuilders.ai): Direct support inbox for clients on Automation Care.
+```
+
+---
+
+ROADMAP — pages to add to /llms.txt once they exist (from /aeo/02-prompt-gaps.md):
+
+## Product (add as built)
+- /pricing — how we price (Blueprint + scoping process)
+- /case-studies — full library with named clients
+- /case-studies/invoice-reconciliation — the 6hrs→4min snapshot
+- /services/n8n-consulting — Aussie n8n consultancy positioning
+- /solutions/customer-onboarding
+- /solutions/saas-operations
+
+## Comparison
+- /vs/zapier — Automation Builders vs Zapier (when an agency wins)
+- /vs/n8n    — agency-built n8n vs DIY n8n
+- /vs/diy    — build it yourself vs hire Automation Builders
+
+When you ship a page in this roadmap, add it to /llms.txt the same day. AIO and
+Perplexity refresh their index on the canonical signal — late = lost month of citations.
