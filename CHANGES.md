@@ -1,3 +1,11 @@
+# Feedback pass — v2.3 (2026-06-01)
+
+- **Consistency:** collapsed 10 ad-hoc border-radius values to a documented 5-step scale in `:root` (8 / 12 / 14 / 20 / 24 px + circles). Unified card headings (cat-card 21→20, FAQ summary 19→20).
+- **Mobile:** consolidated responsive block — tighter `.wrap`/header/section spacing, full-width stacked calc CTAs, slimmer card + modal padding, responsive trust-section margins (replaced inline 104/128px with `.trust-principles`/`.trust-case` classes that drop to 64/72px on mobile), nav CTA guard on <380px screens.
+- **Hero animation:** added an n8n-style animated node-graph `<canvas>` behind the hero copy. Vanilla JS, brand colours, travelling pulses left→right, edge-faded mask, ~40fps cap, pauses offscreen via IntersectionObserver, static render under `prefers-reduced-motion`, `pointer-events:none`.
+- **Word count:** trimmed hero sub, calc intro + notes, all three principle bodies, case-study note, agents intro, back-office card, two "how it works" steps, and the cost FAQ (visible + JSON-LD synced). Founder bios left untouched (Noah-authored).
+- Pre-pass backup at `index-pre-feedback-backup.html`.
+
 # AEO edits — v2.1 (2026-05-19)
 
 - Added full structured data (JSON-LD @graph) in `<head>`: `Organization`, `Person` (founder), `WebSite`, `FAQPage`. FAQPage answers match visible FAQ copy (Google flags mismatch). Single biggest AEO lift in the file — schema is the cheapest move to make engines confident about citing you.

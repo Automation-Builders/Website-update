@@ -131,7 +131,7 @@
           "name": "How much does an Automation Builders build cost?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "It depends on the build. We look at your data first, scope the work, then quote. Engagements start at A$10,000. After launch, ongoing care is 15% of build per year, the standard enterprise vendors charge, covering fixes, monitoring and minor changes for as long as you use the flow."
+            "text": "It depends on the build. We look at your data first, scope the work properly, then quote. Engagements start at A$10,000. After launch, ongoing Automation Care is 15% of your build per year, the same number top enterprise software vendors charge, structured so you keep getting fixes, monitoring, and minor changes for as long as you use the flow."
           }
         }
       ]
@@ -162,16 +162,8 @@
   --good:     #26d07c;
   --danger:   #ff5c7a;
   --grad:     linear-gradient(135deg, #7c5cff 0%, #3ad0ff 100%);
-
-  /* Radius scale — keep every border-radius on one of these five steps:
-     8px  tiny icon buttons / pills   12px form controls + chips
-     14px inner cards                 20px content cards + modals
-     24px hero containers             50% avatars + dots */
-  --r-xs:     8px;
-  --r-sm:     12px;
-  --r-md:     14px;
-  --r-lg:     20px;
-  --r-xl:     24px;
+  --r:        16px;
+  --r-sm:     10px;
 
   /* spacing scale — doubled from v1 */
   --pad-section-d: 160px;
@@ -253,7 +245,7 @@ nav{
 }
 .nav-links a:hover{color:var(--text);}
 .nav-cta{display:flex;align-items:center;gap:8px;}
-.nav-cta .btn{min-height:44px;padding:0 20px;font-size:14px;border-radius:12px;}
+.nav-cta .btn{min-height:44px;padding:0 20px;font-size:14px;border-radius:10px;}
 @media(max-width:760px){.nav-links{display:none;}}
 
 /* ── HERO ── */
@@ -261,19 +253,7 @@ nav{
   padding:var(--pad-hero-d) 0;
   text-align:center;
   position:relative;
-  overflow:hidden;
 }
-/* n8n-style animated node graph behind the hero copy */
-.hero-canvas{
-  position:absolute;inset:0;
-  width:100%;height:100%;
-  z-index:0;pointer-events:none;
-  opacity:.55;
-  -webkit-mask-image:radial-gradient(120% 90% at 50% 32%,#000 35%,transparent 78%);
-  mask-image:radial-gradient(120% 90% at 50% 32%,#000 35%,transparent 78%);
-}
-@media (prefers-reduced-motion: reduce){.hero-canvas{opacity:.4;}}
-.hero .wrap{position:relative;z-index:1;}
 .hero h1{
   font-size:clamp(40px,7vw,84px);
   line-height:1.02;
@@ -398,7 +378,7 @@ nav{
 .input-wrap .prefix{left:14px;} .input-wrap .suffix{right:14px;}
 input[type="number"],input[type="text"],input[type="email"]{
   width:100%;background:rgba(0,0,0,.3);border:1px solid var(--border);
-  border-radius:12px;color:var(--text);padding:14px 14px;
+  border-radius:10px;color:var(--text);padding:14px 14px;
   font-size:15px;font-family:inherit;font-weight:400;outline:none;
   transition:border-color .15s,box-shadow .15s;
 }
@@ -410,11 +390,11 @@ input[type="number"]::-webkit-inner-spin-button{-webkit-appearance:none;margin:0
 input[type="number"]{-moz-appearance:textfield;}
 .add-btn{
   width:100%;background:transparent;border:1.5px dashed var(--border);
-  color:var(--muted);padding:16px;border-radius:12px;cursor:pointer;
+  color:var(--muted);padding:16px;border-radius:11px;cursor:pointer;
   font-size:15px;font-weight:600;font-family:inherit;transition:all .15s;
 }
 .add-btn:hover{color:var(--text);border-color:var(--accent);background:rgba(124,92,255,.06);}
-details.advanced{margin-top:18px;border:1px solid var(--border);border-radius:12px;padding:14px 18px;background:rgba(0,0,0,.18);}
+details.advanced{margin-top:18px;border:1px solid var(--border);border-radius:10px;padding:14px 18px;background:rgba(0,0,0,.18);}
 details.advanced summary{cursor:pointer;color:var(--muted);font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:.12em;list-style:none;user-select:none;}
 details.advanced summary::-webkit-details-marker{display:none;}
 details.advanced summary::before{content:"+ ";color:var(--accent);}
@@ -425,7 +405,7 @@ details.advanced .fields{margin-top:14px;}
 .results{
   display:flex;flex-direction:column;
   background:rgba(0,0,0,.22);
-  border:1px solid var(--border);border-radius:20px;
+  border:1px solid var(--border);border-radius:18px;
   padding:36px 32px;
 }
 .result-eyebrow{
@@ -481,7 +461,7 @@ details.advanced .fields{margin-top:14px;}
 @media(max-width:880px){.case-grid{grid-template-columns:1fr;}}
 .case-card{
   background:linear-gradient(180deg,var(--panel),var(--panel-2));
-  border:1px solid var(--border);border-radius:20px;
+  border:1px solid var(--border);border-radius:18px;
   padding:36px;
 }
 .case-card .case-eyebrow{color:var(--muted);font-size:11px;text-transform:uppercase;letter-spacing:.16em;font-weight:600;margin-bottom:18px;}
@@ -501,7 +481,7 @@ details.advanced .fields{margin-top:14px;}
 .founder-card{
   display:flex;flex-direction:column;gap:14px;
   padding:32px;
-  border:1px solid var(--border);border-radius:20px;
+  border:1px solid var(--border);border-radius:18px;
   background:rgba(255,255,255,.02);
   transition:border-color .25s ease;
 }
@@ -537,7 +517,7 @@ details.advanced .fields{margin-top:14px;}
 /* Legacy single-strip — kept for backwards compatibility if reused elsewhere */
 .founder-strip{
   display:flex;align-items:center;gap:32px;
-  padding:32px;border:1px solid var(--border);border-radius:20px;
+  padding:32px;border:1px solid var(--border);border-radius:18px;
   background:rgba(255,255,255,.02);
 }
 @media(max-width:720px){.founder-strip{flex-direction:column;text-align:center;gap:20px;}}
@@ -558,12 +538,12 @@ details.advanced .fields{margin-top:14px;}
 @media(max-width:880px){.cat-grid{grid-template-columns:1fr;}}
 .cat-card{
   background:linear-gradient(180deg,var(--panel),var(--panel-2));
-  border:1px solid var(--border);border-radius:20px;
+  border:1px solid var(--border);border-radius:18px;
   padding:36px 32px;display:flex;flex-direction:column;gap:14px;
   transition:border-color .2s,transform .2s;
 }
 .cat-card:hover{border-color:#3a4560;transform:translateY(-2px);}
-.cat-card h3{font-size:20px;font-weight:600;letter-spacing:-.015em;line-height:1.25;}
+.cat-card h3{font-size:21px;font-weight:600;letter-spacing:-.015em;line-height:1.25;}
 .cat-card .cat-sub{color:var(--body);font-size:15px;line-height:1.65;}
 .cat-card .common-label{font-size:11px;text-transform:uppercase;letter-spacing:.14em;color:var(--muted);font-weight:600;margin-top:8px;}
 .cat-card ul{list-style:none;display:flex;flex-direction:column;gap:6px;}
@@ -617,7 +597,7 @@ details.advanced .fields{margin-top:14px;}
 }
 @media(max-width:880px){.process-grid{grid-template-columns:1fr;}}
 .step-card{
-  border:1px solid var(--border);border-radius:20px;padding:36px 32px;
+  border:1px solid var(--border);border-radius:18px;padding:36px 32px;
   background:rgba(255,255,255,.02);
   display:flex;flex-direction:column;gap:14px;
   position:relative;
@@ -638,7 +618,7 @@ details.advanced .fields{margin-top:14px;}
 .faq-item summary{
   list-style:none;cursor:pointer;
   padding:28px 0;
-  font-size:20px;font-weight:600;letter-spacing:-.015em;color:var(--text);
+  font-size:19px;font-weight:600;letter-spacing:-.015em;color:var(--text);
   display:flex;justify-content:space-between;align-items:center;gap:24px;
 }
 .faq-item summary::-webkit-details-marker{display:none;}
@@ -683,7 +663,7 @@ footer{border-top:1px solid var(--border);padding:36px 0;color:var(--muted);font
   position:fixed;bottom:24px;left:50%;
   transform:translateX(-50%) translateY(70px);
   background:var(--panel);border:1px solid var(--border);
-  color:var(--text);padding:12px 20px;border-radius:12px;
+  color:var(--text);padding:12px 20px;border-radius:10px;
   font-size:14px;opacity:0;
   transition:transform .25s,opacity .25s;pointer-events:none;z-index:700;white-space:nowrap;
 }
@@ -713,7 +693,7 @@ footer{border-top:1px solid var(--border);padding:36px 0;color:var(--muted);font
 .modal-header .modal-sub{font-size:14px;color:var(--muted);margin-top:8px;line-height:1.5;}
 .modal-close{
   background:none;border:1px solid var(--border);color:var(--muted);cursor:pointer;
-  width:36px;height:36px;border-radius:12px;
+  width:36px;height:36px;border-radius:10px;
   display:grid;place-items:center;font-size:16px;flex-shrink:0;
   transition:color .15s,border-color .15s;
 }
@@ -762,7 +742,7 @@ footer{border-top:1px solid var(--border);padding:36px 0;color:var(--muted);font
 .modal-note a{color:var(--muted);text-decoration:underline;}
 select.modal-select{
   width:100%;background:rgba(0,0,0,.3);border:1px solid var(--border);
-  border-radius:12px;color:var(--text);padding:14px 14px;
+  border-radius:10px;color:var(--text);padding:14px 14px;
   font-size:15px;font-family:inherit;font-weight:400;outline:none;
   appearance:none;-webkit-appearance:none;
   background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8' fill='none'><path d='M1 1l5 5 5-5' stroke='%238b9ab8' stroke-width='1.5' stroke-linecap='round'/></svg>");
@@ -826,7 +806,7 @@ select.modal-select:focus{border-color:var(--accent);}
   box-shadow:0 0 0 6px rgba(124,92,255,.16);
 }
 .demo-node-circle{
-  width:56px;height:56px;border-radius:14px;
+  width:56px;height:56px;border-radius:15px;
   background:var(--panel-2);border:1px solid var(--border);
   display:grid;place-items:center;color:var(--text);
   transition:background .35s ease, box-shadow .35s ease, border-color .35s ease;
@@ -948,60 +928,6 @@ html.lenis body{height:auto;}
   color:var(--text);max-width:920px;margin:0 auto;
 }
 .statement-line .quiet{color:var(--muted);display:block;margin-top:8px;}
-
-/* Trust-section vertical rhythm — generous on desktop, compact on mobile */
-.trust-principles{margin-top:104px;}
-.trust-case{margin-top:128px;}
-
-/* ════════════════════════════════════════════════════════════════════════
-   RESPONSIVE — consolidated mobile rules (≤640px unless noted)
-   ════════════════════════════════════════════════════════════════════════ */
-@media(max-width:768px){
-  .trust-principles{margin-top:64px;}
-  .trust-case{margin-top:72px;}
-  .section-header{margin-bottom:48px;}
-  .trust-logos,.quote-card,.case-grid{margin-bottom:56px;}
-}
-@media(max-width:640px){
-  .wrap{padding:0 20px;}
-  .nav-inner{padding:0 20px;height:64px;}
-  .footer-inner{padding:0 20px;flex-direction:column;align-items:flex-start;gap:20px;}
-
-  /* Hero spacing tightens, sub copy gets room */
-  .hero h1{margin-bottom:20px;}
-  .hero-sub{margin-bottom:40px;}
-  .hero-counter{font-size:14px;}
-  .hero-scroll-cue{margin-top:48px;}
-
-  /* Section headers + intros sit closer to their content */
-  .section-eyebrow{margin-bottom:14px;}
-  .section-header h2{margin-bottom:12px;}
-  .section-header p{font-size:16px;}
-
-  /* Calculator: full-width stacked CTAs, comfortable result panel */
-  .calc-shell{padding:24px 18px;border-radius:20px;}
-  .calc-ctas{flex-direction:column;}
-  .calc-ctas .btn{width:100%;min-width:0;}
-  .result-stats{grid-template-columns:1fr 1fr;}
-  .results{padding:28px 22px;}
-
-  /* Cards: trim heavy desktop padding */
-  .founder-card,.cat-card,.step-card,.case-card{padding:28px 24px;}
-
-  /* Modals fill the small viewport cleanly */
-  .modal{padding:24px 20px;border-radius:20px;}
-  .modal-overlay{padding:14px;}
-  .calendly-frame-wrap{margin:-8px -8px 0;}
-
-  /* FAQ rows: a touch tighter */
-  .faq-item summary{padding:22px 0;font-size:18px;gap:16px;}
-  .faq-item .faq-body{padding-bottom:22px;font-size:15px;}
-}
-@media(max-width:380px){
-  /* Smallest phones — keep the nav CTA from crowding the logo */
-  .nav-cta .btn{padding:0 14px;font-size:13px;}
-  .logo span{font-size:15px;}
-}
 </style>
 </head>
 <body>
@@ -1029,10 +955,9 @@ html.lenis body{height:auto;}
 
 <!-- HERO -->
 <section class="hero">
-  <canvas class="hero-canvas" id="heroCanvas" aria-hidden="true"></canvas>
   <div class="wrap">
     <h1>Stop doing it by hand.</h1>
-    <p class="hero-sub">We give teams of 5–50 back 20+ hours a week. Built, deployed and maintained by an Australian team.</p>
+    <p class="hero-sub">Automation Builders gives back 20+ hours a week to teams of 5–50. Built, deployed, and maintained by an Australian team.</p>
     <div class="hero-ctas">
       <a href="#calculator" class="btn btn-primary">See your savings <span class="arrow">→</span></a>
       <button class="btn btn-secondary" id="openDemo" type="button">Watch 30-sec demo</button>
@@ -1057,7 +982,7 @@ html.lenis body{height:auto;}
     <div class="section-header center">
       <span class="section-eyebrow">Your numbers, in 60 seconds</span>
       <h2>See what manual work is costing you.</h2>
-      <p>Add the work your team does by hand. The big number is what you'll unlock over three years.</p>
+      <p>Add the processes your team does by hand. The headline number is what you'll unlock by automating them over three years.</p>
     </div>
 
     <div class="calc-shell">
@@ -1095,7 +1020,7 @@ html.lenis body{height:auto;}
               </div>
             </div>
           </div>
-          <p style="font-size:11px;color:var(--muted);margin-top:12px;line-height:1.55;">On-cost covers super, tax, software and overhead (industry standard 1.25–1.4×). % automatable is the average share we can hand to software.</p>
+          <p style="font-size:11px;color:var(--muted);margin-top:12px;line-height:1.55;">On-cost accounts for super, tax, software, and overhead (industry standard 1.25–1.4×). % automatable is the average share of each process we can hand to software.</p>
         </details>
       </div>
 
@@ -1114,7 +1039,7 @@ html.lenis body{height:auto;}
           <button class="btn btn-primary" id="openBookFromCalc" type="button">Book a call <span class="arrow">→</span></button>
           <button class="btn btn-secondary" id="openEmailReport" type="button">Email me this report</button>
         </div>
-        <p class="calc-note">Price is scoped on the call, after we see your data. <strong style="color:var(--text);font-weight:600;">Ongoing care is 15% of build per year, the software-maintenance standard.</strong></p>
+        <p class="calc-note">Final price is scoped on the call: we look at your data first, then quote. <strong style="color:var(--text);font-weight:600;">Ongoing Automation Care at 15% of build / year, the industry standard for software maintenance.</strong></p>
       </div>
     </div>
   </div>
@@ -1163,26 +1088,26 @@ html.lenis body{height:auto;}
     </div>
 
     <!-- Principles row — what we won't bend on -->
-    <div class="process-grid trust-principles">
+    <div class="process-grid" style="margin-top:104px;">
       <div class="step-card">
         <span class="step-day">01 · Australian</span>
         <h3>Same timezone. Same week.</h3>
-        <p>An Australian team, Australian hours, one accountable engineer per build. No offshored handoffs, no answering machine on Friday afternoon.</p>
+        <p>An Australian team working Australian hours, with one accountable engineer per build. No offshored handoffs, no follow-the-sun chains, no answering machine on Friday afternoon.</p>
       </div>
       <div class="step-card">
         <span class="step-day">02 · Your stack</span>
         <h3>Your n8n. Your IP.</h3>
-        <p>Every flow runs on an n8n server your organisation owns, using the tools you already pay for: HubSpot, Xero, Slack and 500+ others. No proprietary middleware to unwind later.</p>
+        <p>Every flow runs in an n8n server owned by your organisation. We deploy on the tools you already pay for: HubSpot, Xero, Slack, and 500+ others. Never proprietary middleware you have to unwind later.</p>
       </div>
       <div class="step-card">
         <span class="step-day">03 · Maintained</span>
         <h3>Ongoing care, indefinitely.</h3>
-        <p>Maintained for as long as you use it: monitoring, a 48-hour fix SLA, minor changes and a quarterly health check. Industry-standard 15% of build per year, run by the engineer who built it.</p>
+        <p>Every Build is maintained for as long as you use it: monitoring, a 48-hour fix SLA, minor changes, and a quarterly health check. Industry-standard 15% of your build per year, billed annually. The same support structure top enterprise vendors charge for, run by the same engineer who built the flow.</p>
       </div>
     </div>
 
     <!-- Case study reframed as illustrative — the math is honest, the citation is clean -->
-    <div class="case-grid trust-case">
+    <div class="case-grid" style="margin-top:128px;">
       <div class="case-card">
         <div class="case-eyebrow">Typical invoice reconciliation build (illustrative)</div>
         <div class="case-row"><span class="label">Before</span><span class="value">6 hrs/week reconciling invoices</span></div>
@@ -1190,7 +1115,7 @@ html.lenis body{height:auto;}
         <div class="case-row win"><span class="label">Annual value unlocked</span><span class="value">A$58,000</span></div>
       </div>
       <div class="case-side">
-        <p>Standard Australian SMB rates: 2 people × 6 hrs/week × 48 weeks × A$55/hr × 1.3 on-cost. <strong>Your calculator shows your number, not ours.</strong> Drop your processes in and check.</p>
+        <p>Numbers based on the calculator at standard Australian SMB rates: 2 people × 6 hrs/week × 48 weeks × A$55/hr × 1.3 on-cost. <strong>The number you see in your calculator is your number, not ours.</strong> Drop your own processes in and check.</p>
       </div>
     </div>
   </div>
@@ -1202,7 +1127,7 @@ html.lenis body{height:auto;}
     <div class="section-header">
       <span class="section-eyebrow">What we build</span>
       <h2>Three categories. Endless combinations.</h2>
-      <p>Most of what we ship falls into three buckets. Tap "See in calculator" to drop in a sample and see what it's worth.</p>
+      <p>Most of what we ship falls into one of three buckets. Tap "See in calculator" to drop a sample process in and see what it's worth to you.</p>
     </div>
     <div class="cat-grid">
       <article class="cat-card">
@@ -1229,7 +1154,7 @@ html.lenis body{height:auto;}
       </article>
       <article class="cat-card">
         <h3>Back-office automations</h3>
-        <p class="cat-sub">Quiet, expensive work that piles up. We take it off your team's plate so they can focus on growth.</p>
+        <p class="cat-sub">Quiet, expensive work that piles up. We take it off your team's plate so they can focus on the work that grows the business.</p>
         <div class="common-label">Common builds</div>
         <ul>
           <li>Invoice reconciliation</li>
@@ -1308,12 +1233,12 @@ html.lenis body{height:auto;}
       <div class="step-card">
         <span class="step-day">Day 2–5</span>
         <h3>Automation Assessment.</h3>
-        <p>A fixed scope and a fixed price. No surprises, no hourly creep, no estimate that doubles by week three.</p>
+        <p>You receive a fixed scope and fixed price. No surprises, no hourly creep, no estimate that doubles by week three.</p>
       </div>
       <div class="step-card">
         <span class="step-day">Day 14–30</span>
         <h3>Your first automation is live.</h3>
-        <p>By month one you've saved around 20 hours. Then ongoing care keeps it running: 15% of build per year.</p>
+        <p>Time you've already saved by month one: roughly 20 hours. Then ongoing Automation Care keeps it running: 15% of build per year, the industry standard.</p>
       </div>
     </div>
   </div>
@@ -1345,7 +1270,7 @@ html.lenis body{height:auto;}
       </details>
       <details class="faq-item" id="faq-cost">
         <summary>How much will it cost?<span class="faq-icon">+</span></summary>
-        <div class="faq-body">It depends on the build. We look at your data first, scope the work, then quote. Engagements start at A$10,000. After launch, ongoing care is 15% of build per year, the standard enterprise vendors charge, covering fixes, monitoring and minor changes for as long as you use the flow.</div>
+        <div class="faq-body">It depends on the build. We look at your data first, scope the work properly, then quote. Engagements start at A$10,000. After launch, ongoing Automation Care is 15% of your build per year, the same number top enterprise software vendors charge, structured so you keep getting fixes, monitoring, and minor changes for as long as you use the flow.</div>
       </details>
     </div>
   </div>
@@ -1369,7 +1294,7 @@ html.lenis body{height:auto;}
 <footer>
   <div class="footer-inner">
     <a href="#top" class="logo" style="font-size:14px;">
-      <img src="square_logo.png" alt="" style="width:28px;height:28px;border-radius:8px;object-fit:cover;" />
+      <img src="square_logo.png" alt="" style="width:28px;height:28px;border-radius:7px;object-fit:cover;" />
       <span>Automation Builders</span>
     </a>
     <div class="footer-links">
@@ -1620,142 +1545,6 @@ async function postLead(kind, payload){
     n += 1;
     el.textContent = AUD.format(n);
   }, COUNTER_TICK_MS);
-})();
-
-/* ── HERO NODE-GRAPH ANIMATION (n8n-style) ── */
-(function heroGraph(){
-  const canvas = $('heroCanvas');
-  if (!canvas) return;
-  const ctx = canvas.getContext('2d');
-  const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
-
-  const PURPLE = '124,92,255';
-  const CYAN   = '58,208,255';
-
-  let dpr = 1, W = 0, H = 0;
-  let nodes = [], edges = [], pulses = [];
-  let raf = null, running = false;
-
-  function rand(a, b){ return a + Math.random() * (b - a); }
-
-  // Build a loose grid of nodes with slight jitter, then connect near neighbours.
-  function build(){
-    nodes = []; edges = [];
-    const cols = W < 640 ? 4 : (W < 1000 ? 6 : 8);
-    const rows = W < 640 ? 5 : 4;
-    const cellW = W / cols, cellH = H / rows;
-    for (let r = 0; r < rows; r++){
-      for (let c = 0; c < cols; c++){
-        nodes.push({
-          x: cellW * (c + 0.5) + rand(-cellW * 0.28, cellW * 0.28),
-          y: cellH * (r + 0.5) + rand(-cellH * 0.28, cellH * 0.28),
-          r: rand(1.4, 2.8),
-          c: c, row: r
-        });
-      }
-    }
-    // Connect each node to a neighbour roughly to its right (left-to-right flow feel).
-    nodes.forEach((n, i) => {
-      const targets = nodes
-        .map((m, j) => ({ j, d: Math.hypot(m.x - n.x, m.y - n.y) }))
-        .filter(t => t.j !== i && nodes[t.j].x > n.x)
-        .sort((a, b) => a.d - b.d)
-        .slice(0, 2);
-      targets.forEach(t => {
-        if (t.d < Math.max(cellW, cellH) * 1.7) edges.push({ a: i, b: t.j });
-      });
-    });
-  }
-
-  function resize(){
-    dpr = Math.min(window.devicePixelRatio || 1, 2);
-    const rect = canvas.getBoundingClientRect();
-    W = rect.width; H = rect.height;
-    canvas.width = Math.round(W * dpr);
-    canvas.height = Math.round(H * dpr);
-    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-    build();
-  }
-
-  function spawnPulse(){
-    if (!edges.length) return;
-    const e = edges[(Math.random() * edges.length) | 0];
-    pulses.push({ e, t: 0, speed: rand(0.0016, 0.0042), hue: Math.random() < 0.5 ? PURPLE : CYAN });
-  }
-
-  function drawStatic(){
-    ctx.clearRect(0, 0, W, H);
-    ctx.lineWidth = 1;
-    edges.forEach(e => {
-      const a = nodes[e.a], b = nodes[e.b];
-      ctx.strokeStyle = 'rgba(124,92,255,0.10)';
-      ctx.beginPath(); ctx.moveTo(a.x, a.y); ctx.lineTo(b.x, b.y); ctx.stroke();
-    });
-    nodes.forEach(n => {
-      ctx.fillStyle = 'rgba(139,154,184,0.35)';
-      ctx.beginPath(); ctx.arc(n.x, n.y, n.r, 0, Math.PI * 2); ctx.fill();
-    });
-  }
-
-  let last = 0;
-  function frame(ts){
-    if (!running) return;
-    raf = requestAnimationFrame(frame);
-    if (ts - last < 1000 / 40) return; // cap ~40fps
-    last = ts;
-
-    ctx.clearRect(0, 0, W, H);
-
-    // edges
-    ctx.lineWidth = 1;
-    edges.forEach(e => {
-      const a = nodes[e.a], b = nodes[e.b];
-      ctx.strokeStyle = 'rgba(124,92,255,0.09)';
-      ctx.beginPath(); ctx.moveTo(a.x, a.y); ctx.lineTo(b.x, b.y); ctx.stroke();
-    });
-
-    // nodes
-    nodes.forEach(n => {
-      ctx.fillStyle = 'rgba(139,154,184,0.30)';
-      ctx.beginPath(); ctx.arc(n.x, n.y, n.r, 0, Math.PI * 2); ctx.fill();
-    });
-
-    // travelling pulses
-    if (Math.random() < 0.08 && pulses.length < 26) spawnPulse();
-    pulses = pulses.filter(p => p.t <= 1);
-    pulses.forEach(p => {
-      p.t += p.speed * 16;
-      const a = nodes[p.e.a], b = nodes[p.e.b];
-      if (!a || !b) { p.t = 2; return; }
-      const x = a.x + (b.x - a.x) * p.t;
-      const y = a.y + (b.y - a.y) * p.t;
-      const fade = Math.sin(Math.min(p.t, 1) * Math.PI); // fade in+out
-      ctx.fillStyle = `rgba(${p.hue},${0.85 * fade})`;
-      ctx.shadowColor = `rgba(${p.hue},${0.9 * fade})`;
-      ctx.shadowBlur = 8;
-      ctx.beginPath(); ctx.arc(x, y, 2.4, 0, Math.PI * 2); ctx.fill();
-      ctx.shadowBlur = 0;
-    });
-  }
-
-  function start(){ if (running) return; running = true; last = 0; raf = requestAnimationFrame(frame); }
-  function stop(){ running = false; if (raf) cancelAnimationFrame(raf); raf = null; }
-
-  resize();
-  let rt;
-  window.addEventListener('resize', () => { clearTimeout(rt); rt = setTimeout(resize, 200); });
-
-  if (reduced){ drawStatic(); return; } // static graph, no motion
-
-  // Only animate while the hero is on screen.
-  const hero = canvas.closest('.hero');
-  if ('IntersectionObserver' in window && hero){
-    new IntersectionObserver(entries => {
-      entries.forEach(e => e.isIntersecting ? start() : stop());
-    }, { threshold: 0.01 }).observe(hero);
-  } else {
-    start();
-  }
 })();
 
 /* ── SCARCITY LINE ── */
