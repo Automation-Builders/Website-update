@@ -1,3 +1,9 @@
+# Demo realism + modal fix + lead wiring — v2.4 (2026-06-02)
+
+- **Modal bug fix (critical):** closed modal overlays were `opacity:0; pointer-events:none`, but `.demo-slide.is-active` had `pointer-events:all` — a descendant re-enabling pointer events through a "closed" full-viewport overlay. The invisible demo modal silently ate clicks/focus over the centre of the page (dead demo button, un-typeable email field, dead mid-page CTAs). Fixed by making closed overlays `visibility:hidden` (a descendant can't override that). Verified across all controls with a headless-browser repro.
+- **Realistic demo:** replaced abstract icon nodes with a real app pipeline — Outlook → AI → Xero → Excel rail (brand-coloured tiles) plus morphing mock-UI "screens" that look like each app: an Outlook email with attachment, an AI extracted-fields panel (supplier/amount/GST/due/GL + 96% confidence), a Xero draft-bill card, and an Excel tracker row being logged. 30s timeline, ends on the 6hrs→4min result.
+- **Lead capture wired (n8n):** `LEAD_WEBHOOK` now takes your n8n Production webhook URL; `postLead` returns real success/failure; the "Email me this report" toast is honest ("Report on its way ✓" only on real delivery, otherwise "we'll email you shortly"). Booking still proceeds to Calendly regardless. **TODO: paste the n8n webhook URL into `LEAD_WEBHOOK`.**
+
 # Feedback pass — v2.3 (2026-06-01)
 
 - **Consistency:** collapsed 10 ad-hoc border-radius values to a documented 5-step scale in `:root` (8 / 12 / 14 / 20 / 24 px + circles). Unified card headings (cat-card 21→20, FAQ summary 19→20).
