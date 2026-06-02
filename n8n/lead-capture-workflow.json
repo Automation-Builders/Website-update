@@ -1,0 +1,132 @@
+{
+  "name": "Website — Lead Capture (report + booking)",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "5e644b5e-d54e-4a7e-83ea-ea1666b199f6",
+        "responseMode": "onReceived",
+        "responseCode": 200,
+        "responseData": "={ \"ok\": true }",
+        "options": {}
+      },
+      "id": "webhook",
+      "name": "Webhook (POST /webhook/...)",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [200, 360],
+      "webhookId": "5e644b5e-d54e-4a7e-83ea-ea1666b199f6",
+      "notes": "URL is referenced by the website via vercel.json (/api/lead -> this). Responds 200 immediately so the site shows success; the rest of the flow runs async."
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": { "caseSensitive": true, "version": 2 },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.body.kind }}",
+                    "rightValue": "email-report",
+                    "operator": { "type": "string", "operation": "equals" }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "outputKey": "report"
+            },
+            {
+              "conditions": {
+                "options": { "caseSensitive": true, "version": 2 },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.body.kind }}",
+                    "rightValue": "booking",
+                    "operator": { "type": "string", "operation": "equals" }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "outputKey": "booking"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "switch-kind",
+      "name": "Which kind?",
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3,
+      "position": [440, 360]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Build the prospect report + an internal Slack summary from the calculator data.\nconst b = $input.first().json.body || {};\nconst calc = b.calculator || {};\nconst r = calc.results || {};\nconst tasks = (calc.tasks || []).map(t => `\\u2022 ${t.name || 'Untitled'} \\u2014 ${t.people} people \\u00d7 ${t.hrs} hrs/wk @ A$${t.rate}/hr`).join('\\n');\n\nconst html = `\n<div style=\"font-family:Inter,Arial,sans-serif;max-width:560px;margin:0 auto;color:#1a2030\">\n  <h2 style=\"font-weight:600;letter-spacing:-.02em\">Your savings snapshot</h2>\n  <p>Hi ${b.name || 'there'}, here are the numbers from your Automation Builders calculator.</p>\n  <table style=\"width:100%;border-collapse:collapse;margin:18px 0\">\n    <tr><td style=\"padding:10px 0;border-bottom:1px solid #e6e9f0;color:#5b6678\">Value unlocked over 3 years</td><td style=\"padding:10px 0;border-bottom:1px solid #e6e9f0;text-align:right;font-weight:600\">${r.threeYearValue || '-'}</td></tr>\n    <tr><td style=\"padding:10px 0;border-bottom:1px solid #e6e9f0;color:#5b6678\">Hours burned / year</td><td style=\"padding:10px 0;border-bottom:1px solid #e6e9f0;text-align:right;font-weight:600\">${r.hoursPerYear || '-'}</td></tr>\n    <tr><td style=\"padding:10px 0;border-bottom:1px solid #e6e9f0;color:#5b6678\">Cost / year</td><td style=\"padding:10px 0;border-bottom:1px solid #e6e9f0;text-align:right;font-weight:600\">${r.costPerYear || '-'}</td></tr>\n    <tr><td style=\"padding:10px 0;color:#5b6678\">5-year cost of inaction</td><td style=\"padding:10px 0;text-align:right;font-weight:600\">${r.fiveYearCost || '-'}</td></tr>\n  </table>\n  <p style=\"color:#5b6678;font-size:14px\">Processes you entered:<br>${(tasks || '').replace(/\\n/g,'<br>')}</p>\n  <p style=\"margin-top:22px\"><a href=\"https://calendly.com/noah-automationbuilders/30min\" style=\"background:#7c5cff;color:#fff;text-decoration:none;padding:12px 22px;border-radius:10px;display:inline-block;font-weight:600\">Book a 30-min call \\u2192</a></p>\n  <p style=\"color:#9aa3b2;font-size:12px;margin-top:24px\">Automation Builders \\u00b7 support@automationbuilders.ai</p>\n</div>`;\n\nconst slackText = `:inbox_tray: *Report requested* \\u2014 ${b.name || '-'} <${b.email || '-'}>\\n3-yr value: ${r.threeYearValue || '-'} \\u00b7 ${r.processCount || 0} process(es) \\u00b7 ${r.hoursPerYear || '-'} hrs/yr`;\n\nreturn [{ json: { to: b.email, name: b.name, subject: 'Your Automation Builders savings report', html, slackText } }];"
+      },
+      "id": "build-report",
+      "name": "Build report",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [700, 240]
+    },
+    {
+      "parameters": {
+        "sendTo": "={{ $json.to }}",
+        "subject": "={{ $json.subject }}",
+        "message": "={{ $json.html }}",
+        "options": { "appendAttribution": false }
+      },
+      "id": "gmail-report",
+      "name": "Email report to prospect",
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2,
+      "position": [940, 200],
+      "credentials": { "gmailOAuth2": { "id": "REPLACE_ME", "name": "support@automationbuilders.ai (replace)" } },
+      "notes": "Swap for the Microsoft Outlook node if you'd rather send via Microsoft 365. Set the 'From' to support@automationbuilders.ai."
+    },
+    {
+      "parameters": {
+        "select": "channel",
+        "channelId": { "__rl": true, "value": "#leads", "mode": "name" },
+        "text": "={{ $json.slackText }}",
+        "otherOptions": {}
+      },
+      "id": "slack-report",
+      "name": "Notify team (report)",
+      "type": "n8n-nodes-base.slack",
+      "typeVersion": 2.2,
+      "position": [1180, 200],
+      "credentials": { "slackApi": { "id": "REPLACE_ME", "name": "Slack (replace)" } }
+    },
+    {
+      "parameters": {
+        "select": "channel",
+        "channelId": { "__rl": true, "value": "#leads", "mode": "name" },
+        "text": "=:calendar: *New booking* \\u2014 {{ $json.body.name }} <{{ $json.body.email }}>\\nUrgency: {{ $json.body.urgency || 'n/a' }}\\n3-yr value: {{ $json.body.calculator.results.threeYearValue || '-' }} \\u00b7 {{ $json.body.calculator.results.processCount || 0 }} process(es)",
+        "otherOptions": {}
+      },
+      "id": "slack-booking",
+      "name": "Notify team (booking)",
+      "type": "n8n-nodes-base.slack",
+      "typeVersion": 2.2,
+      "position": [700, 480],
+      "credentials": { "slackApi": { "id": "REPLACE_ME", "name": "Slack (replace)" } },
+      "notes": "Calendly handles the actual scheduling. This just alerts the team with the prep data the prospect already entered."
+    }
+  ],
+  "connections": {
+    "Webhook (POST /webhook/...)": { "main": [[{ "node": "Which kind?", "type": "main", "index": 0 }]] },
+    "Which kind?": {
+      "main": [
+        [{ "node": "Build report", "type": "main", "index": 0 }],
+        [{ "node": "Notify team (booking)", "type": "main", "index": 0 }]
+      ]
+    },
+    "Build report": { "main": [[{ "node": "Email report to prospect", "type": "main", "index": 0 }]] },
+    "Email report to prospect": { "main": [[{ "node": "Notify team (report)", "type": "main", "index": 0 }]] }
+  },
+  "settings": { "executionOrder": "v1" },
+  "meta": { "description": "Receives website leads (email-report + booking) and emails the report / pings Slack. Webhook path matches the site's vercel.json proxy." },
+  "tags": [{ "name": "website" }, { "name": "lead-capture" }]
+}
