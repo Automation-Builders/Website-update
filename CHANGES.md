@@ -46,3 +46,5 @@
 - **60-second demo video** — `#demoModal` has a placeholder; drop in the embed or `<video>` tag when ready.
 - **`/api/lead` webhook** — both booking and email-report flows POST here. Wire up an endpoint (or replace with Slack webhook, n8n, Resend, etc.). Until then the data still appears in `console.log` for testing.
 - **`SCARCITY` constant** in `<script>` — update monthly (e.g. `currentMonth: 'June', currentStatus: 'is full.'`).
+
+<!-- auto-deploy connectivity test: 2026-06-02T18:23 -->
