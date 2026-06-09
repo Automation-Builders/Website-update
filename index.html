@@ -1674,14 +1674,16 @@ html.lenis body{height:auto;}
 <script>
 /* ── EDITABLE CONSTANTS — Noah updates these without redeploying ── */
 const CALENDLY_URL = 'https://calendly.com/noah-automationbuilders/30min';
-// Paste your n8n PRODUCTION webhook URL here (Webhook node → Production URL).
+// n8n PRODUCTION webhook URL (Webhook node → Production URL).
 // It receives every lead: { kind, ts, name, email, urgency, calculator } as JSON.
 // n8n then emails the report / pings Slack / logs the lead.
-// Same-origin path. Vercel rewrites /api/lead -> the n8n webhook server-side
-// (see vercel.json), so the browser never makes a cross-origin call and CORS
-// is a non-issue. To change the destination, edit vercel.json, not this line.
+// The site is hosted on GitHub Pages (static, no server-side proxy), so the
+// browser POSTs directly to the n8n subdomain. That is a cross-origin call, so
+// the n8n Webhook node must allow this origin via its "Allowed Origins (CORS)"
+// option (set it to https://automationbuilders.ai or *). The workflow must also
+// be Active for the Production URL to respond.
 // Leave '' to disable network calls (the UI will tell users to email us directly).
-const LEAD_WEBHOOK = '/api/lead';
+const LEAD_WEBHOOK = 'https://n8n.automationbuilders.ai/webhook/5e644b5e-d54e-4a7e-83ea-ea1666b199f6';
 const COUNTER_START_AUD = 100000; // hero live counter starting value
 const COUNTER_TICK_MS = 8000;     // +A$1 every N ms
 
