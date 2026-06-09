@@ -192,9 +192,10 @@ The custom domain is set in **Pages settings** and pinned by the `CNAME` file.
 **Do not touch** the rest of the zone: the `n8n` A record (`34.151.128.121`), the
 Google **MX** records (email), the **NS** and **SOA** records.
 
-> HTTPS: GitHub auto-provisions a Let's Encrypt certificate once the domain
-> resolves to its servers. After it shows as issued, turn on **Pages → Enforce
-> HTTPS**. Editing GoDaddy DNS triggers an SMS identity check each time.
+> HTTPS: done. GitHub issued a Let's Encrypt certificate for the apex + `www`
+> and **Enforce HTTPS** is on. If you ever re-point DNS, the cert reprovisions;
+> if it stalls, remove and re-add the custom domain in Pages settings to force a
+> re-check. Editing GoDaddy DNS triggers an SMS identity check each time.
 
 ---
 
@@ -222,5 +223,5 @@ Google **MX** records (email), the **NS** and **SOA** records.
 | Site build / design / copy | ✅ done, live |
 | GitHub Actions → Pages deploy | ✅ auto-deploys on push to main |
 | Custom domain cutover (DNS) | ✅ done 2026-06-09 |
-| HTTPS "Enforce HTTPS" | ⏳ enable once GitHub issues the cert (§8) |
+| HTTPS (cert + Enforce HTTPS) | ✅ done 2026-06-09 (Let's Encrypt, enforced) |
 | Lead form → n8n (CORS + activate) | ⏳ engineer (see §5/§6) |
