@@ -173,11 +173,11 @@
   --r-lg:     20px;
   --r-xl:     24px;
 
-  /* spacing scale — doubled from v1 */
+  /* spacing scale — doubled from v1; mobile dialled back so sections don't drift apart on a phone */
   --pad-section-d: 160px;
-  --pad-section-m: 96px;
+  --pad-section-m: 56px;
   --pad-hero-d:    180px;
-  --pad-hero-m:    96px;
+  --pad-hero-m:    60px;
 }
 
 *{box-sizing:border-box;margin:0;padding:0;}
@@ -1696,11 +1696,14 @@ const DEMO_VIDEO = {
 };
 
 // Scarcity — edit monthly. Set currentStatus to 'full' or 'slots: N'.
+// hideAfter: the whole line disappears from this date (visitor's local time)
+// so stale availability never shows. Update the months + bump hideAfter each month.
 const SCARCITY = {
-  currentMonth: 'May',
+  currentMonth: 'June',
   currentStatus: 'is full.',
-  nextMonth: 'June',
-  nextStatus: 'has 1 slot remaining.'
+  nextMonth: 'July',
+  nextStatus: 'has 1 slot remaining.',
+  hideAfter: '2026-07-01T00:00:00'
 };
 
 /* ── HELPERS ── */
@@ -1886,6 +1889,10 @@ async function postLead(kind, payload){
 
 /* ── SCARCITY LINE ── */
 (function scarcity(){
+  if (SCARCITY.hideAfter && new Date() >= new Date(SCARCITY.hideAfter)) {
+    $('scarcityLine').style.display = 'none';
+    return;
+  }
   $('scarcityCurrent').innerHTML = `<strong>${SCARCITY.currentMonth}</strong> ${SCARCITY.currentStatus}`;
   $('scarcityNext').innerHTML    = `<strong>${SCARCITY.nextMonth}</strong> ${SCARCITY.nextStatus}`;
 })();
